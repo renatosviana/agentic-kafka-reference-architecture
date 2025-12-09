@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "AccountEventSummary",
+  "namespace": "com.viana.avro",
+  "fields": [
+    { "name": "accountId",     "type": "string" },
+    { "name": "summary",       "type": "string" },
+    { "name": "classification","type": "string" },
+    { "name": "riskScore",     "type": "int" },
+    { "name": "createdAt",     "type": "string" }
+  ]
+}
