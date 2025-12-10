@@ -78,8 +78,8 @@ Stores the result in Postgres.
 
 The React UI fetches /summaries/{accountId} and displays results.
 
-# Mermaid Architecture Diagram
-```
+# Architecture Diagram
+```mermaid
 sequenceDiagram
     actor U as User
     participant UI as React UI (Vite)
