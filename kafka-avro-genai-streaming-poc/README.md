@@ -7,24 +7,34 @@ This project is a fully functional end-to-end streaming architecture that ingest
 # A lightweight React UI fetches account summaries to display a human-readable history.
 
 # Technologies Used
-Backend
-Component	Tech
-Runtime	Java 21, Spring Boot 3
-Messaging	Kafka 7.x (Confluent images)
-Schema	Avro + Schema Registry
-Stream Processing	Kafka Streams (KTable)
-Data Store	PostgreSQL 15
-AI / LLM	Custom GenAIClient using OpenAI API (or local)
-Build tool	Gradle
-Frontend
-Component	Tech
-UI Framework	React + Vite
-HTTP	axios
-Infrastructure
+## Backend
+
+
+| Component        | Tech                                                   |
+|------------------|--------------------------------------------------------|
+| Runtime          | **Java 21, Spring Boot 3**                             |
+| Messaging        | **Kafka 7.x** (Confluent images)                       |
+| Schema           | **Avro + Schema Registry**                             |
+| Stream Processing| **Kafka Streams (KTable)**                             |
+| Data Store       | **PostgreSQL 15**                                      |
+| AI / LLM         | **Custom GenAIClient using OpenAI API (or local)**     |
+| Build Tool       | **Gradle**                                             |
+
+
+## Frontend
+
+| Component        | Tech                                                   |
+|------------------|--------------------------------------------------------|
+| UI Framework     | **React + Vite**                                       |
+| HTTP             | **axios**                                              |
+
+	
+	
+### Infrastructure
 
 Docker Compose (Kafka stack + Postgres)
 
-# Folder Structure
+## Folder Structure
 ```
 kafka-avro-genai-streaming-poc/
 │
@@ -70,42 +80,50 @@ The React UI fetches /summaries/{accountId} and displays results.
 
 # Mermaid Architecture Diagram
 ```
-flowchart LR
+sequenceDiagram
+    actor U as User
+    participant UI as React UI (Vite)
+    participant API as Spring Boot API<br/>AccountController
+    participant Prod as AccountEventProducer
+    participant K as Kafka<br/>account-events
+    participant KS as Kafka Streams<br/>Balance KTable
+    participant Cons as AccountEventConsumer
+    participant GA as GenAiClient<br/>(OpenAI API)
+    participant SumProd as AccountSummaryProducer
+    participant K2 as Kafka<br/>account-event-summaries-avro
+    participant SumCons as SummaryConsumer<br/>JPA Service
+    participant DB as Postgres<br/>account_summaries
+    participant SumAPI as AccountSummaryController
 
-subgraph User
-A1[POST /accounts/{id}/credit]
-A2[POST /accounts/{id}/debit]
-A3[UI Load Summaries]
-end
+    %% ---- Produce event ----
+    U->>UI: Click "Credit/Debit" (ACC123, amount)
+    UI->>API: POST /accounts/{id}/credit?amount=...
+    API->>Prod: build AccountEvent (Avro)
+    Prod->>K: send(AccountEvent) to topic account-events
 
-subgraph SpringBoot
-C1[AccountController]
-C2[AccountEventProducer]
-C3[AccountProcessingService<br/>GenAIClient]
-C4[AccountSummaryController]
-end
+    %% ---- Streaming & balance ----
+    K-->>KS: AccountEvent consumed by Streams
+    KS-->>KS: Update KTable balance for ACC123
+    KS-->>Cons: Emit event + newBalance
 
-subgraph Kafka
-K1[(account-events)]
-K2[(account-balance-store-changelog)]
-K3>KTable: account-balance-store]
-end
+    %% ---- GenAI & summary ----
+    Cons->>GA: summarize(accountId, type, amount, newBalance)
+    GA-->>Cons: GenAiResponse (summary, classification, riskScore)
+    Cons->>SumProd: sendSummary(sourceEvent, GenAiResponse)
+    SumProd->>K2: send(AccountEventSummary Avro)
 
-subgraph StreamApp
-S1[Kafka Streams Processor<br/>Balance Aggregation]
-end
+    %% ---- Persist in Postgres ----
+    K2-->>SumCons: consume AccountEventSummary
+    SumCons->>DB: INSERT INTO account_summaries (...)
 
-subgraph Postgres
-DB[(account_summaries table)]
-end
+    %% ---- UI reads summaries ----
+    U->>UI: Click "Load summaries"
+    UI->>SumAPI: GET /summaries/ACC123
+    SumAPI->>DB: SELECT * FROM account_summaries WHERE account_id=ACC123 ORDER BY created_at DESC
+    DB-->>SumAPI: List<AccountSummaryEntity>
+    SumAPI-->>UI: JSON summaries
+    UI-->>U: Render timeline of GenAI summaries
 
-A1 --> C1 --> C2 --> K1
-A2 --> C1 --> C2 --> K1
-
-K1 --> S1 --> K3 --> C3
-C3 --> DB
-
-A3 --> C4 --> DB --> A3
 ```
 # Components Explained
 1. Event Producer (AccountEventProducer)
@@ -171,14 +189,14 @@ cd account-service
 Runs on http://localhost:8080
 
 ## 3. Start UI
-cd account-ui
-npm install
-npm run dev
+$ cd account-ui
+$ npm install
+$ npm run dev
 
 
 Open browser:
 
-http://localhost:5174
+http://localhost:5173
 
 # Testing via REST (Postman or curl)
 Credit event
@@ -196,14 +214,14 @@ Check summaries in Postgres
 
 Inside container:
 
-docker exec -it postgres psql -U postgres genai_kafka
+$ docker exec -it genai_kafka_postgres psql -U postgres -d genai_kafka
 
-select * from account_summaries order by id desc;
+genai_kafka=# select * from account_summaries order by id desc;
 
 # Testing the UI
 
 Open:
-http://localhost:5174
+http://localhost:5173
 
 Input: ACC123
 
