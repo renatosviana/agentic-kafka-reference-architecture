@@ -1,4 +1,3 @@
-// src/main/java/com/viana/poc/genai/GenAiService.java
 package com.viana.poc.genai;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -120,7 +119,7 @@ public class GenAiService {
         }
     }
 
-    // ===== DTOs used only in this service =====
+    // DTOs used only in this service
 
     public record ChatRequest(
             String model,

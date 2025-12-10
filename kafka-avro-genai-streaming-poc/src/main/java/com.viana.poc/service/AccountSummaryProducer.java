@@ -1,4 +1,3 @@
-// src/main/java/com/viana/poc/service/AccountSummaryProducer.java
 package com.viana.poc.service;
 
 import com.viana.avro.AccountEvent;

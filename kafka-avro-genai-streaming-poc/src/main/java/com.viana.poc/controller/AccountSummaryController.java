@@ -1,4 +1,3 @@
-// src/main/java/com/viana/poc/controller/AccountSummaryController.java
 package com.viana.poc.controller;
 
 import com.viana.poc.entity.AccountSummaryEntity;

@@ -51,6 +51,6 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: genai_kafka
     ports:
-      - "5433:5433"
+      - "5432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data

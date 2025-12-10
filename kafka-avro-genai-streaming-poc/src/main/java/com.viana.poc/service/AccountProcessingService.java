@@ -28,7 +28,6 @@ public class AccountProcessingService {
 
     public GenAiResponse process(AccountEvent event, double newBalance) {
 
-        // 1) Call GenAI
         GenAiRequest request = new GenAiRequest(
                 event.getAccountId(),
                 event.getEventType().toString(),

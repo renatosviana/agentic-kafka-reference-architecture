@@ -2,10 +2,12 @@
 .gradle/
 build/
 out/
+postgres-data/
 
 # IntelliJ / IDE
 .idea/
 *.iml
+
 
 # Logs
 *.log

@@ -35,7 +35,6 @@ public class AccountBalanceTopology {
                 eventsByAccount.groupByKey(Grouped.with(Serdes.String(), accountEventSerde));
 
         // Make types explicit so the compiler stops complaining
-
         Initializer<Double> initializer = () -> 0.0d;
 
         Aggregator<String, AccountEvent, Double> aggregator =

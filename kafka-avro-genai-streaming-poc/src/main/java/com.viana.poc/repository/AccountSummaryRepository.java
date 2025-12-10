@@ -1,4 +1,3 @@
-// src/main/java/com/viana/poc/repository/AccountSummaryRepository.java
 package com.viana.poc.repository;
 
 import com.viana.poc.entity.AccountSummaryEntity;
