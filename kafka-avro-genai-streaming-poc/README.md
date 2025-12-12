@@ -1,4 +1,4 @@
-# GenAI + Kafka + Agentic Streaming POC
+# GenAI + Kafka Streaming POC
 
 Real-time Account Event Processing with GenAI Summaries, Kafka Streams KTable, and React UI
 
@@ -72,67 +72,20 @@ When balance updates, a downstream consumer:
 
 Calls GenAI to interpret the event.
 
-Produces an agentic summary, classification, and risk level.
+Produces an GenAI summary, classification, and risk level.
 
 Stores the result in Postgres.
 
 The React UI fetches /summaries/{accountId} and displays results.
 
-# Architecture Diagram
-```mermaid
-sequenceDiagram
-    actor U as User
-    participant UI as React UI (Vite)
-    participant API as Spring Boot API<br/>AccountController
-    participant Prod as AccountEventProducer
-    participant K as Kafka<br/>account-events
-    participant KS as Kafka Streams<br/>Balance KTable
-    participant Cons as AccountEventConsumer
-    participant GA as GenAiClient<br/>(OpenAI API)
-    participant SumProd as AccountSummaryProducer
-    participant K2 as Kafka<br/>account-event-summaries-avro
-    participant SumCons as SummaryConsumer<br/>JPA Service
-    participant DB as Postgres<br/>account_summaries
-    participant SumAPI as AccountSummaryController
-
-    %% ---- Produce event ----
-    U->>UI: Click "Credit/Debit" (ACC123, amount)
-    UI->>API: POST /accounts/{id}/credit?amount=...
-    API->>Prod: build AccountEvent (Avro)
-    Prod->>K: send(AccountEvent) to topic account-events
-
-    %% ---- Streaming & balance ----
-    K-->>KS: AccountEvent consumed by Streams
-    KS-->>KS: Update KTable balance for ACC123
-    KS-->>Cons: Emit event + newBalance
-
-    %% ---- GenAI & summary ----
-    Cons->>GA: summarize(accountId, type, amount, newBalance)
-    GA-->>Cons: GenAiResponse (summary, classification, riskScore)
-    Cons->>SumProd: sendSummary(sourceEvent, GenAiResponse)
-    SumProd->>K2: send(AccountEventSummary Avro)
-
-    %% ---- Persist in Postgres ----
-    K2-->>SumCons: consume AccountEventSummary
-    SumCons->>DB: INSERT INTO account_summaries (...)
-
-    %% ---- UI reads summaries ----
-    U->>UI: Click "Load summaries"
-    UI->>SumAPI: GET /summaries/ACC123
-    SumAPI->>DB: SELECT * FROM account_summaries WHERE account_id=ACC123 ORDER BY created_at DESC
-    DB-->>SumAPI: List<AccountSummaryEntity>
-    SumAPI-->>UI: JSON summaries
-    UI-->>U: Render timeline of GenAI summaries
-
-```
 # Components Explained
-1. Event Producer (AccountEventProducer)
+### 1. Event Producer (AccountEventProducer)
 
 Publishes Avro-encoded event to Kafka topic account-events.
 
 Calls GenAI to generate human-readable summaries.
 
-2. Kafka Streams State Store (KTable)
+### 2. Kafka Streams State Store (KTable)
 
 Maintains real-time account balances:
 
@@ -141,7 +94,7 @@ Maintains real-time account balances:
 
 State is recovered on restart.
 
-3. Agentic GenAI Processing
+## GenAI Processing
 
 AccountProcessingService:
 
@@ -161,7 +114,7 @@ Assigns a risk score
 
 Saves the result in Postgres
 
-4. UI (React)
+## UI (React)
 
 Calls backend: GET http://localhost:8080/summaries/ACC123
 
@@ -233,7 +186,7 @@ Created: 2025-12-09
 Classification: NORMAL (risk: 50)
 Summary: A credit of $50 was made...
 
-# Agentic Behavior Testing
+# GenAI Behavior Testing
 
 To verify GenAI decisions:
 
@@ -243,15 +196,157 @@ POST /accounts/ACC123/credit?amount=50
 Suspicious event (negative amount)
 POST /accounts/ACC123/credit?amount=-10
 
+# OpenAI / GenAI Setup
+This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
+Summarize each AccountEvent into human-readable text
 
+
+Return a simple classification (e.g. NORMAL)
+
+
+Return a basic risk score
+
+Open 
+## Create an OpenAI account and API key
+### 1. Go to the OpenAI platform and sign in:
+   https://platform.openai.com OpenAI Platform
+### 2. Create (or select) a Project.
+### 3. Go to Developer quickstart and click “Create API key”. OpenAI Platform
+### 4. Copy the key once and store it somewhere safe – you cannot see it again.
+
+
+⚠️ Treat the API key like a password. Do not commit it to GitHub.
+
+## Configure the app to use your API key
+   You can configure it through environment variables or application.yml.
+###   Option A – environment variables (recommended)
+   Set these before starting the Spring Boot app:
+   export OPENAI_API_KEY="sk-xxxxx..."      
+   export OPENAI_MODEL="gpt-4.1-mini"
+
+Make sure your application.yml (or application.properties) maps them:
+openai:
+api-key: ${OPENAI_API_KEY}
+model: ${OPENAI_MODEL:gpt-4.1-mini}
+
+### Option B – directly in application.yml (for local only)
+openai:
+api-key: sk-xxxxx...          # do NOT commit this
+model: gpt-4.1-mini
+
+## How tokens and pricing work
+   OpenAI bills based on tokens, not “number of calls”:
+   A token is a small chunk of text; in English it’s roughly ~4 characters on average (so 100 tokens ≈ 75 words). OpenAI Platform
+
+
+Every request uses:
+
+
+Input tokens – your prompt and system instructions
+
+
+Output tokens – the model’s reply
+
+
+You pay per token, at different rates for each model; exact prices are on the official pricing page:
+https://openai.com/api/pricing OpenAI Help Center
+
+
+For this project, each event summary call consumes a small prompt (accountId, type, amount, balance) plus the model’s summary text, so token usage per event is usually low.
+## Checking your usage and cost
+   You can see how many tokens you’ve used and how much you’ve spent:
+   ### Go to the Usage page on the OpenAI platform:
+   https://platform.openai.com/usage
+
+   ### Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
+
+
+# Plain Kafka Pipeline vs GenAI-Enhanced Pipeline
+## Plain Kafka pipeline (no GenAI)
+
+A typical Kafka pipeline would produce AccountEvent → consume/process it (e.g., update balance in a KTable or DB) → optionally emit a derived event (e.g., AccountBalanceUpdated), and the UI would read structured data (balances/events) from an API or directly from a materialized store.
+
+### Architecture - Sequence Diagram for a typical Kafka pipeline
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant UI as React UI (Vite)
+    participant API as Spring Boot API<br/>AccountController
+    participant Prod as AccountEventProducer
+    participant K as Kafka<br/>account-events
+    participant KS as Kafka Streams<br/>Balance KTable
+    participant Cons as AccountEventConsumer
+    participant GA as GenAiClient<br/>(OpenAI API)
+    participant SumProd as AccountSummaryProducer
+    participant K2 as Kafka<br/>account-event-summaries-avro
+    participant SumCons as SummaryConsumer<br/>JPA Service
+    participant DB as Postgres<br/>account_summaries
+    participant SumAPI as AccountSummaryController
+
+    %% ---- Produce event ----
+    U->>UI: Click "Credit/Debit" (ACC123, amount)
+    UI->>API: POST /accounts/{id}/credit?amount=...
+    API->>Prod: build AccountEvent (Avro)
+    Prod->>K: send(AccountEvent) to topic account-events
+
+    %% ---- Streaming & balance ----
+    K-->>KS: AccountEvent consumed by Streams
+    KS-->>KS: Update KTable balance for ACC123
+    KS-->>Cons: Emit event + newBalance
+
+    %% ---- GenAI & summary ----
+    Cons->>GA: summarize(accountId, type, amount, newBalance)
+    GA-->>Cons: GenAiResponse (summary, classification, riskScore)
+    Cons->>SumProd: sendSummary(sourceEvent, GenAiResponse)
+    SumProd->>K2: send(AccountEventSummary Avro)
+
+    %% ---- Persist in Postgres ----
+    K2-->>SumCons: consume AccountEventSummary
+    SumCons->>DB: INSERT INTO account_summaries (...)
+
+    %% ---- UI reads summaries ----
+    U->>UI: Click "Load summaries"
+    UI->>SumAPI: GET /summaries/ACC123
+    SumAPI->>DB: SELECT * FROM account_summaries WHERE account_id=ACC123 ORDER BY created_at DESC
+    DB-->>SumAPI: List<AccountSummaryEntity>
+    SumAPI-->>UI: JSON summaries
+    UI-->>U: Render timeline of GenAI summaries
+
+```
+
+### Architecture - Sequence Diagram for the GenAI-enhanced pipeline
+
+This pipeline still produces AccountEvent and computes state (balance) via Kafka/KTable, but then it calls an LLM to generate a human-readable summary + classification/risk signal, persists the result to Postgres (account_summaries), and the UI displays a timeline of “explanations” (not just raw events), which is the key difference: AI adds interpretation on top of the streaming facts.
+```mermaid
+sequenceDiagram
+actor U as User
+participant UI as React UI
+participant API as Spring Boot API
+participant K as Kafka
+participant KS as Kafka Streams / KTable
+participant GA as GenAI (LLM)
+participant DB as Postgres
+
+    U->>API: POST AccountEvent
+    API->>K: Produce AccountEvent
+    K->>KS: Stream event
+    KS->>KS: Update balance state
+    KS->>GA: Send event + balance
+    GA-->>KS: Summary + classification + risk
+    KS->>DB: Persist AI summary
+    UI->>API: GET /summaries/{accountId}
+    API->>DB: Query summaries
+    DB-->>API: AI-generated explanations
+    API-->>UI: Human-readable timeline
+```
 ## Expected behavior:
 
-GenAI flags unusual behavior
+1. GenAI flags unusual behavior
 
-Risk score increases
+2. Risk score increases
 
-Summary explains anomaly
+3. Summary explains anomaly
 
-Stored in Postgres
+4. Stored in Postgres
 
-Visible in UI
+5. Visible in UI
