@@ -231,7 +231,7 @@ select * from account_summaries order by id desc;
 2. Enter `ACC123` as the account ID.
 3. Click "Load summaries" to view GenAI-enhanced account history.
 
-## Agentic Behavior Testing
+## GenAI Behavior Testing
 
 To validate GenAI decisions:
 
