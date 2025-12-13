@@ -64,6 +64,7 @@ kafka-avro-genai-streaming-poc/
 ├── gradlew.bat
 │
 └── README.md
+```
 
 ---
 
