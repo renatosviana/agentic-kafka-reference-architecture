@@ -38,27 +38,32 @@ This project demonstrates an end-to-end streaming architecture that ingests acco
 ```
 kafka-avro-genai-streaming-poc/
 │
-├── account-service/                 # Spring Boot app
-│   ├── src/main/java/com/viana/poc
-│   │   ├── controller/              # REST endpoints
-│   │   ├── entity/                  # JPA entities
-│   │   ├── repository/              # JPA repositories
-│   │   ├── streams/                 # Kafka Stream processor (KTable)
-│   │   ├── service/                 # GenAI + Kafka logic
-│   │   ├── genai/                   # GenAI client, request/response
-│   │   └── constants/
-│   └── resources/
-│       ├── application.yml
-│       └── avro schemas
-│
-├── docker/
-│   └── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres
-│
 ├── account-ui/
-│   └── src/App.jsx                  # React UI
+│   └── src/App.jsx                # React UI
+│
+├── src/
+│   └── main/
+│       ├── avro/                  # Avro schemas
+│       │   ├── account-event.avsc
+│       │   └── account-event-summary.avsc
+│       ├── java/com/viana/poc/    # Spring Boot app
+│       │   ├── config/
+│       │   ├── controller/        # REST endpoints
+│       │   ├── entity/            # JPA entities
+│       │   ├── genai/             # GenAI client, request/response
+│       │   ├── repository/        # JPA repositories
+│       │   ├── service/           # GenAI + Kafka logic
+│       │   └── com.viana.poc.constants/
+│       └── resources/
+│           └── application.yml
+│
+├── docker-compose.yml             # Kafka, Zookeeper, Schema Registry, Postgres
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradlew
+├── gradlew.bat
 │
 └── README.md
-```
 
 ---
 
@@ -253,7 +258,7 @@ sequenceDiagram
 ### 1. Start the environment
 
 ```bash
-cd docker
+
 docker compose up -d
 ```
 
@@ -266,7 +271,7 @@ You should have:
 ### 2. Start Spring Boot app
 
 ```bash
-cd account-service
+
 ./gradlew bootRun
 ```
 
