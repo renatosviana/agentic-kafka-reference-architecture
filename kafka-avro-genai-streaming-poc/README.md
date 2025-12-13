@@ -27,17 +27,18 @@ This project demonstrates an end-to-end streaming architecture that ingests acco
 kafka-avro-genai-streaming-poc/
 ├── account-ui/                  # React UI
 │   └── src/App.jsx              # UI entrypoint
-├── src/main/java/com/viana/poc  # Spring Boot backend
-│   ├── controller/              # REST endpoints
-│   ├── entity/                  # JPA entities
-│   ├── repository/              # JPA repositories
-│   ├── streams/                 # Kafka Streams processor (KTable)
-│   ├── service/                 # GenAI + Kafka logic
-│   ├── genai/                   # GenAI client, request/response
-│   └── constants/
-├── src/main/resources/
-│   ├── application.yml
-│   └── avro/                    # Avro schemas
+├── src/main/
+│   ├── avro/                    # Avro schemas
+│   ├── java/com/viana/poc       # Spring Boot backend
+│   │   ├── controller/          # REST endpoints
+│   │   ├── entity/              # JPA entities
+│   │   ├── repository/          # JPA repositories
+│   │   ├── streams/             # Kafka Streams processor (KTable)
+│   │   ├── service/             # GenAI + Kafka logic
+│   │   ├── genai/               # GenAI client, request/response
+│   │   └── constants/
+│   └── resources/
+│       └── application.yml
 ├── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres
 ├── postgres-data/               # Local Postgres data volume
 ├── build.gradle.kts
@@ -64,8 +65,8 @@ kafka-avro-genai-streaming-poc/
 flowchart LR
 
   subgraph User
-    A1[POST /accounts/{id}/credit]
-    A2[POST /accounts/{id}/debit]
+    A1[POST /accounts/:id/credit]
+    A2[POST /accounts/:id/debit]
     A3[UI Load Summaries]
   end
 
