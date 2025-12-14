@@ -1,0 +1,139 @@
+{
+	"info": {
+		"_postman_id": "b962a127-d093-49e3-b951-dd2cb8fa9e7d",
+		"name": "GenAI-Kafka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50799688",
+		"_collection_link": "https://evolutifyai-8312506.postman.co/workspace/evolutifyai's-Workspace~d2ac1629-9bbd-4497-87cc-ad69bbaffc51/collection/50799688-b962a127-d093-49e3-b951-dd2cb8fa9e7d?action=share&source=collection_link&creator=50799688"
+	},
+	"item": [
+		{
+			"name": "GenAI",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"prompt\": \"Testing GenAI response!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/summarize-event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"summarize-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Credit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/accounts/ACC123/credit?amount=50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"ACC123",
+						"credit"
+					],
+					"query": [
+						{
+							"key": "amount",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Debit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/accounts/ACC123/debit?amount=50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"ACC123",
+						"debit"
+					],
+					"query": [
+						{
+							"key": "amount",
+							"value": "50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Credit anomaly",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/accounts/ACC123/credit?amount=-50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"ACC123",
+						"credit"
+					],
+					"query": [
+						{
+							"key": "amount",
+							"value": "-50"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sanit Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/subjects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"subjects"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
