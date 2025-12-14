@@ -218,19 +218,12 @@ All of that is done with a single prompt; there is no vector database, no embedd
 
 ## 1. Create an OpenAI account and API key
 
-Go to the OpenAI platform and sign in:
-https://platform.openai.com
+1. Go to the OpenAI platform and sign in: [https://platform.openai.com](https://platform.openai.com/)
+2. Create (or select) a Project.
+3. In the left sidebar, go to **API keys** and click **"Create API key"**.
+4. Copy the key once and store it somewhere safe – you cannot see it again.
 
-OpenAI Platform
-
-Create (or select) a Project.
-
-In the left sidebar, go to API keys and click “Create API key”.
-OpenAI Platform
-
-Copy the key once and store it somewhere safe – you cannot see it again.
-
-⚠️ Treat the API key like a password. Do not commit it to GitHub.
+> ⚠️ Treat the API key like a password. Do not commit it to GitHub.⚠️ Treat the API key like a password. Do not commit it to GitHub.
 
 ## 2. Configure the app to use your API key
 
