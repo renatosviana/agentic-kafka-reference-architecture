@@ -84,20 +84,20 @@ select * from account_summaries order by id desc;
 
 ## Testing the UI
 
-1. Open `http://localhost:5173` in a browser.
-2. Enter `ACC123` as the account ID.
-3. Click "Load summaries" to view GenAI-enhanced account history.
+1. Keep the Control Center running to monitor incoming messages at runtime. Control Center will be available at [http://localhost:9021](http://localhost:9021):
 
-## GenAI Behavior Testing
-
-Keep the Control Center running to monitor incoming messages at runtime. Control Center will be available at [http://localhost:9021](http://localhost:9021):
-
-### 1. Run it in Postman:
+- Run it in Postman:
 <img width="1287" height="657" alt="image" src="https://github.com/user-attachments/assets/77e8a03f-0597-4eae-9339-93a38e7fe241" />
 
-### 2. Observe in Control Center:
+- Observe in Control Center:
 <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9eeb1bf1-7180-4145-af9d-ef36c7730c30" />
 
+
+2. Open `http://localhost:5173` in a browser.
+3. Enter `ACC123` as the account ID.
+4. Click "Load summaries" to view GenAI-enhanced account history.
+
+## GenAI Behavior Testing
 
 To validate GenAI decisions:
 
