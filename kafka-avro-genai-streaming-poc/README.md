@@ -61,6 +61,56 @@ npm run dev
 
 Frontend will be available at `http://localhost:5173`.
 
+## Testing via REST
+
+### Credit Event
+
+```bash
+curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=50"
+```
+
+### Debit Event
+
+```bash
+curl -X POST "http://localhost:8080/accounts/ACC123/debit?amount=20"
+```
+
+### Check Summaries in Postgres
+
+```bash
+docker exec -it genai_kafka_postgres psql -U postgres -d genai_kafka
+select * from account_summaries order by id desc;
+```
+
+## Testing the UI
+
+1. Open `http://localhost:5173` in a browser.
+2. Enter `ACC123` as the account ID.
+3. Click "Load summaries" to view GenAI-enhanced account history.
+
+## GenAI Behavior Testing
+
+To validate GenAI decisions:
+
+- Normal behavior:
+
+  ```bash
+  curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=50"
+  ```
+
+- Suspicious behavior (e.g., negative credit):
+
+  ```bash
+  curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=-10"
+  ```
+
+Expected high-level behavior:
+
+- GenAI flags unusual behavior.
+- Risk score increases and the summary explains the anomaly.
+- The result is stored in Postgres and visible in the UI.
+
+
 ## Technologies Used
 
 - **Backend**
@@ -277,55 +327,6 @@ For this project, each event summary call consumes a small prompt (accountId, ty
 
 - Go to the Usage page on the OpenAI platform: [https://platform.openai.com/usage](https://platform.openai.com/usage)
 - Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
-
-## Testing via REST
-
-### Credit Event
-
-```bash
-curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=50"
-```
-
-### Debit Event
-
-```bash
-curl -X POST "http://localhost:8080/accounts/ACC123/debit?amount=20"
-```
-
-### Check Summaries in Postgres
-
-```bash
-docker exec -it genai_kafka_postgres psql -U postgres -d genai_kafka
-select * from account_summaries order by id desc;
-```
-
-## Testing the UI
-
-1. Open `http://localhost:5173` in a browser.
-2. Enter `ACC123` as the account ID.
-3. Click "Load summaries" to view GenAI-enhanced account history.
-
-## GenAI Behavior Testing
-
-To validate GenAI decisions:
-
-- Normal behavior:
-
-  ```bash
-  curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=50"
-  ```
-
-- Suspicious behavior (e.g., negative credit):
-
-  ```bash
-  curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=-10"
-  ```
-
-Expected high-level behavior:
-
-- GenAI flags unusual behavior.
-- Risk score increases and the summary explains the anomaly.
-- The result is stored in Postgres and visible in the UI.
 
 ## About
 
