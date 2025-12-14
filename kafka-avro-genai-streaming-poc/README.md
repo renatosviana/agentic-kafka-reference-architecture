@@ -179,7 +179,7 @@ participant UI as UI
 
 ## This GenAI-enhanced pipeline 
 
-This pipeline still produces AccountEvent and computes state (balance) via Kafka/KTable, but then it calls an LLM to generate a human-readable summary + classification/risk signal, persists the result to Postgres (account_summaries), and the UI displays a timeline of “explanations” (not just raw events), which is the key difference: AI adds interpretation on top of the streaming facts.
+This pipeline still produces AccountEvent and computes state (balance) via Kafka/KTable, but then it calls an LLM to generate a human-readable summary + classification/risk signal, persists the result to Postgres (account_summaries), and the UI displays a timeline of “explanations” (not just raw events), which is the key difference: **AI adds interpretation on top of the streaming facts**.
 ```mermaid
 sequenceDiagram
     actor U as User
@@ -222,7 +222,7 @@ All of that is done with a single prompt; there is no vector database, no embedd
 3. In the left sidebar, go to **API keys** and click **"Create API key"**.
 4. Copy the key once and store it somewhere safe – you cannot see it again.
 
-> ⚠️ Treat the API key like a password. Do not commit it to GitHub.⚠️ Treat the API key like a password. Do not commit it to GitHub.
+> ⚠️ Treat the API key like a password. **Do not commit it to GitHub**.
 
 ## 2. Configure the app to use your API key
 
