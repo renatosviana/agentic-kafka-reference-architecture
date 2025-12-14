@@ -20,6 +20,7 @@ This project demonstrates an end-to-end streaming architecture that ingests acco
 - **Infrastructure / Build**
   - Docker Compose for Kafka stack + Postgres
   - Gradle (Kotlin DSL)
+- **IDE (optional):** IntelliJ IDEA Community Edition (or any Java IDE)
 
 ## Folder Structure
 
