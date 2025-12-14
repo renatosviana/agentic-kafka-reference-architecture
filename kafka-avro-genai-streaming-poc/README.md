@@ -132,14 +132,17 @@ docker ps
 
 /agentic-kafka-reference-architecture/kafka-avro-genai-streaming-poc (main)
 $ docker ps
-CONTAINER ID   IMAGE                                   COMMAND                  CREATED          STATUS          PORTS                                           
-   NAMES
-d1fdb7401d49   postgres:16                             "docker-entrypoint.s…"   12 minutes ago   Up 11 minutes   0.0.0.0:5432->5432/tcp                          
-   genai_kafka_postgres
-224fa756ba1a   confluentinc/cp-schema-registry:7.6.0   "/etc/confluent/dock…"   4 days ago       Up 17 seconds   0.0.0.0:8081->8081/tcp                          
-   schema-registry
-177d914c01cb   confluentinc/cp-kafka:7.6.0             "/etc/confluent/dock…"   4 days ago       Up 17 seconds   0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp   kafka
-524d4ed82e20   confluentinc/cp-zookeeper:7.6.0         "/etc/confluent/dock…"   4 days ago       Up 11 minutes   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp         zookeeper
+CONTAINER ID   IMAGE                                             COMMAND                  CREATED             STATUS             PORTS                                              
+NAMES
+9e5d40906ecb   confluentinc/cp-enterprise-control-center:7.6.0   "/etc/confluent/dock…"   11 seconds ago      Up 9 seconds       0.0.0.0:9021->9021/tcp                             
+control-center
+d1fdb7401d49   postgres:16                                       "docker-entrypoint.s…"   About an hour ago   Up About an hour   0.0.0.0:5432->5432/tcp                             
+genai_kafka_postgres
+224fa756ba1a   confluentinc/cp-schema-registry:7.6.0             "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:8081->8081/tcp                             
+schema-registry
+177d914c01cb   confluentinc/cp-kafka:7.6.0                       "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp   kafka
+524d4ed82e20   confluentinc/cp-zookeeper:7.6.0                   "/etc/confluent/dock…"   4 days ago          Up About an hour   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp         
+zookeeper
 ```
 
 Services:
