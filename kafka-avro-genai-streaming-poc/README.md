@@ -204,7 +204,7 @@ sequenceDiagram
     API-->>UI: Human-readable timeline
 ```
 
-# OpenAI / GenAI Setup
+## OpenAI / GenAI Setup
 
 This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
 
