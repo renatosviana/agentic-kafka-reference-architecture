@@ -93,9 +93,11 @@ select * from account_summaries order by id desc;
 <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9eeb1bf1-7180-4145-af9d-ef36c7730c30" />
 
 
-2. Open `http://localhost:5173` in a browser.
+2. Open [http://localhost:5173](http://localhost:5173) in a browser.
 3. Enter `ACC123` as the account ID.
 4. Click "Load summaries" to view GenAI-enhanced account history.
+
+<img width="872" height="666" alt="image" src="https://github.com/user-attachments/assets/b924a1ce-1392-4aed-8ec3-6e210c29eb9a" />
 
 ## GenAI Behavior Testing
 
