@@ -128,6 +128,17 @@ docker compose up -d
 Ensure Kafka, Schema Registry, and Postgres are running:
 ```bash
 docker ps
+
+/agentic-kafka-reference-architecture/kafka-avro-genai-streaming-poc (main)
+$ docker ps
+CONTAINER ID   IMAGE                                   COMMAND                  CREATED          STATUS          PORTS                                           
+   NAMES
+d1fdb7401d49   postgres:16                             "docker-entrypoint.s…"   12 minutes ago   Up 11 minutes   0.0.0.0:5432->5432/tcp                          
+   genai_kafka_postgres
+224fa756ba1a   confluentinc/cp-schema-registry:7.6.0   "/etc/confluent/dock…"   4 days ago       Up 17 seconds   0.0.0.0:8081->8081/tcp                          
+   schema-registry
+177d914c01cb   confluentinc/cp-kafka:7.6.0             "/etc/confluent/dock…"   4 days ago       Up 17 seconds   0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp   kafka
+524d4ed82e20   confluentinc/cp-zookeeper:7.6.0         "/etc/confluent/dock…"   4 days ago       Up 11 minutes   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp         zookeeper
 ```
 
 Services:
