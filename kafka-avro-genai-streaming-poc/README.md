@@ -86,7 +86,7 @@ select * from account_summaries order by id desc;
 
 1. Keep the Control Center running to monitor incoming messages at runtime. Control Center will be available at [http://localhost:9021](http://localhost:9021):
 
-- Run it in Postman:
+- Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc/doc)):
 <img width="1287" height="657" alt="image" src="https://github.com/user-attachments/assets/77e8a03f-0597-4eae-9339-93a38e7fe241" />
 
 - Observe in Control Center:
@@ -147,6 +147,7 @@ Expected high-level behavior:
 
 ```
 kafka-avro-genai-streaming-poc/
+├── doc/                         # Postman Collection
 ├── account-ui/                  # React UI
 │   └── src/App.jsx              # UI entrypoint
 ├── src/main/
