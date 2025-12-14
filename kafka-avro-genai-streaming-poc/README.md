@@ -115,6 +115,9 @@ To validate GenAI decisions:
   curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=-10"
   ```
 
+  <img width="1296" height="522" alt="image" src="https://github.com/user-attachments/assets/7672940b-c25a-4a2f-ba2d-2ae314e6e4da" />
+
+
 Expected high-level behavior:
 
 - GenAI flags unusual behavior.
