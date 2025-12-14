@@ -163,7 +163,7 @@ npm install
 npm run dev
 ```
 
-Frontend will be available at `http://localhost:5174`.
+Frontend will be available at `http://localhost:5173`.
 
 # Plain Kafka Pipeline vs GenAI-Enhanced Pipeline
 ## Plain Kafka pipeline (no GenAI)
@@ -297,7 +297,7 @@ select * from account_summaries order by id desc;
 
 ## Testing the UI
 
-1. Open `http://localhost:5174` in a browser.
+1. Open `http://localhost:5173` in a browser.
 2. Enter `ACC123` as the account ID.
 3. Click "Load summaries" to view GenAI-enhanced account history.
 
