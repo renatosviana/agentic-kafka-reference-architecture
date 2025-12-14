@@ -124,6 +124,70 @@ Expected high-level behavior:
 - Risk score increases and the summary explains the anomaly.
 - The result is stored in Postgres and visible in the UI.
 
+## OpenAI / GenAI Setup
+
+This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
+
+- Summarize each AccountEvent into human-readable text
+
+- Return a simple classification (e.g. NORMAL)
+
+- Return a basic risk score
+
+All of that is done with a single prompt; there is no vector database, no embeddings, no LangChain, and no agent tooling – just a direct LLM call.
+
+## 1. Create an OpenAI account and API key
+
+1. Go to the OpenAI platform and sign in: [https://platform.openai.com](https://platform.openai.com/)
+2. Create (or select) a Project.
+3. In the left sidebar, go to **API keys** and click **"Create API key"**.
+4. Copy the key once and store it somewhere safe – you cannot see it again.
+
+> ⚠️ Treat the API key like a password. **Do not commit it to GitHub**.
+
+## 2. Configure the app to use your API key
+
+You can configure it through environment variables or application.yml.
+
+### Option A – environment variables (recommended)
+
+Set these before starting the Spring Boot app:
+```yaml
+openai:
+  api-key: ${OPENAI_API_KEY}
+  model: ${OPENAI_MODEL:gpt-4.1-mini}
+```
+
+### Option B – directly in application.yml (for local only)
+```yaml
+openai:
+  api-key: sk-xxxxx...          # do NOT commit this
+  model: gpt-4.1-mini
+```
+
+### How tokens and pricing work
+
+OpenAI bills based on tokens, not “number of calls”:
+
+A token is a small chunk of text; in English it’s roughly ~4 characters on average (so 100 tokens ≈ 75 words).
+OpenAI Platform
+
+Every request uses:
+
+- Input tokens – your prompt and system instructions
+
+- Output tokens – the model’s reply
+
+You pay per token, at different rates for each model; exact prices are on the official pricing page:
+https://openai.com/api/pricing
+
+For this project, each event summary call consumes a small prompt (accountId, type, amount, balance) plus the model’s summary text, so token usage per event is usually low.
+
+## 4. Checking your usage and cost
+
+- Go to the Usage page on the OpenAI platform: [https://platform.openai.com/usage](https://platform.openai.com/usage)
+- Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
+
 
 ## Technologies Used
 
@@ -282,71 +346,6 @@ sequenceDiagram
     DB-->>API: AI-generated explanations
     API-->>UI: Human-readable timeline
 ```
-
-## OpenAI / GenAI Setup
-
-This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
-
-- Summarize each AccountEvent into human-readable text
-
-- Return a simple classification (e.g. NORMAL)
-
-- Return a basic risk score
-
-All of that is done with a single prompt; there is no vector database, no embeddings, no LangChain, and no agent tooling – just a direct LLM call.
-
-## 1. Create an OpenAI account and API key
-
-1. Go to the OpenAI platform and sign in: [https://platform.openai.com](https://platform.openai.com/)
-2. Create (or select) a Project.
-3. In the left sidebar, go to **API keys** and click **"Create API key"**.
-4. Copy the key once and store it somewhere safe – you cannot see it again.
-
-> ⚠️ Treat the API key like a password. **Do not commit it to GitHub**.
-
-## 2. Configure the app to use your API key
-
-You can configure it through environment variables or application.yml.
-
-### Option A – environment variables (recommended)
-
-Set these before starting the Spring Boot app:
-```yaml
-openai:
-  api-key: ${OPENAI_API_KEY}
-  model: ${OPENAI_MODEL:gpt-4.1-mini}
-```
-
-### Option B – directly in application.yml (for local only)
-```yaml
-openai:
-  api-key: sk-xxxxx...          # do NOT commit this
-  model: gpt-4.1-mini
-```
-
-### How tokens and pricing work
-
-OpenAI bills based on tokens, not “number of calls”:
-
-A token is a small chunk of text; in English it’s roughly ~4 characters on average (so 100 tokens ≈ 75 words).
-OpenAI Platform
-
-Every request uses:
-
-- Input tokens – your prompt and system instructions
-
-- Output tokens – the model’s reply
-
-You pay per token, at different rates for each model; exact prices are on the official pricing page:
-https://openai.com/api/pricing
-
-For this project, each event summary call consumes a small prompt (accountId, type, amount, balance) plus the model’s summary text, so token usage per event is usually low.
-
-## 4. Checking your usage and cost
-
-- Go to the Usage page on the OpenAI platform: [https://platform.openai.com/usage](https://platform.openai.com/usage)
-- Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
-
 ## About
 
 Experimental POC combining Kafka Streams, Avro, and GenAI for real-time account event summarization and risk classification.
