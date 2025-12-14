@@ -208,11 +208,11 @@ sequenceDiagram
 
 This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
 
-Summarize each AccountEvent into human-readable text
+- Summarize each AccountEvent into human-readable text
 
-Return a simple classification (e.g. NORMAL)
+- Return a simple classification (e.g. NORMAL)
 
-Return a basic risk score
+- Return a basic risk score
 
 All of that is done with a single prompt; there is no vector database, no embeddings, no LangChain, and no agent tooling – just a direct LLM call.
 
