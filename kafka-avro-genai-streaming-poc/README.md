@@ -311,14 +311,18 @@ You can configure it through environment variables or application.yml.
 ### Option A – environment variables (recommended)
 
 Set these before starting the Spring Boot app:
+```yaml
 openai:
-api-key: ${OPENAI_API_KEY}
-model: ${OPENAI_MODEL:gpt-4.1-mini}
+  api-key: ${OPENAI_API_KEY}
+  model: ${OPENAI_MODEL:gpt-4.1-mini}
+```
 
 ### Option B – directly in application.yml (for local only)
+```yaml
 openai:
-api-key: sk-xxxxx...          # do NOT commit this
-model: gpt-4.1-mini
+  api-key: sk-xxxxx...          # do NOT commit this
+  model: gpt-4.1-mini
+```
 
 ### How tokens and pricing work
 
