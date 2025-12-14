@@ -44,7 +44,6 @@ kafka-avro-genai-streaming-poc/
 ├── build.gradle.kts
 └── settings.gradle.kts
 ```
-> Note: Rename `settings.gradle.tks` to `settings.gradle.kts` for consistency.
 
 ## System Architecture
 
@@ -241,7 +240,7 @@ openai:
 api-key: sk-xxxxx...          # do NOT commit this
 model: gpt-4.1-mini
 
-How tokens and pricing work
+### How tokens and pricing work
 
 OpenAI bills based on tokens, not “number of calls”:
 
@@ -250,9 +249,9 @@ OpenAI Platform
 
 Every request uses:
 
-Input tokens – your prompt and system instructions
+- Input tokens – your prompt and system instructions
 
-Output tokens – the model’s reply
+- Output tokens – the model’s reply
 
 You pay per token, at different rates for each model; exact prices are on the official pricing page:
 https://openai.com/api/pricing
@@ -261,12 +260,8 @@ For this project, each event summary call consumes a small prompt (accountId, ty
 
 ## 4. Checking your usage and cost
 
-You can see how many tokens you’ve used and how much you’ve spent:
-
-Go to the Usage page on the OpenAI platform:
-https://platform.openai.com/usage
-
-Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
+- Go to the Usage page on the OpenAI platform: [https://platform.openai.com/usage](https://platform.openai.com/usage)
+- Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.Filter by project and date range to verify the volume of calls from this Kafka+GenAI app.
 
 ## Testing via REST
 
