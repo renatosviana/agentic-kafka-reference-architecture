@@ -1,4 +1,4 @@
-# GenAI + Kafka + Agentic Streaming POC
+# GenAI + Kafka Streaming POC
 
 Real-time account event processing with Kafka Streams, Avro, GenAI summaries, and a React UI.
 
