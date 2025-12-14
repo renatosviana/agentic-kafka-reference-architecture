@@ -4,6 +4,63 @@ Real-time account event processing with Kafka Streams, Avro, GenAI summaries, an
 
 This project demonstrates an end-to-end streaming architecture that ingests account events, maintains running balances with Kafka Streams, generates GenAI-based summaries and risk classifications, and stores normalized results in PostgreSQL for querying via a lightweight React frontend.
 
+## Prerequisites
+
+- Docker and Docker Compose installed.
+- Java 21.
+- Node.js (for the React UI).
+- Valid configuration for the GenAI client (e.g., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
+
+## Running the Stack
+
+### 1. Start Kafka + Postgres
+
+```bash
+docker compose up -d
+```
+Ensure Kafka, Schema Registry, and Postgres are running:
+```bash
+docker ps
+
+/agentic-kafka-reference-architecture/kafka-avro-genai-streaming-poc (main)
+$ docker ps
+CONTAINER ID   IMAGE                                             COMMAND                  CREATED             STATUS             PORTS                                              
+NAMES
+9e5d40906ecb   confluentinc/cp-enterprise-control-center:7.6.0   "/etc/confluent/dock…"   11 seconds ago      Up 9 seconds       0.0.0.0:9021->9021/tcp                             
+control-center
+d1fdb7401d49   postgres:16                                       "docker-entrypoint.s…"   About an hour ago   Up About an hour   0.0.0.0:5432->5432/tcp                             
+genai_kafka_postgres
+224fa756ba1a   confluentinc/cp-schema-registry:7.6.0             "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:8081->8081/tcp                             
+schema-registry
+177d914c01cb   confluentinc/cp-kafka:7.6.0                       "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp   kafka
+524d4ed82e20   confluentinc/cp-zookeeper:7.6.0                   "/etc/confluent/dock…"   4 days ago          Up About an hour   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp         
+zookeeper
+```
+
+Services:
+
+- Kafka: `localhost:29092`
+- Schema Registry: `localhost:8081`
+- Postgres: `localhost:5432`
+
+### 2. Start Spring Boot App
+
+```bash
+./gradlew bootRun
+```
+
+Backend will be available at `http://localhost:8080`.
+
+### 3. Start React UI
+
+```bash
+cd account-ui
+npm install
+npm run dev
+```
+
+Frontend will be available at `http://localhost:5173`.
+
 ## Technologies Used
 
 - **Backend**
@@ -111,63 +168,6 @@ flowchart LR
   - The LLM returns a natural-language summary, behavior classification (e.g., NORMAL / SUSPICIOUS), and risk score, which are persisted in Postgres.
 - **UI (React)**
   - Calls `GET http://localhost:8080/summaries/{accountId}` and renders the account's summaries.
-
-## Prerequisites
-
-- Docker and Docker Compose installed.
-- Java 21.
-- Node.js (for the React UI).
-- Valid configuration for the GenAI client (e.g., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
-
-## Running the Stack
-
-### 1. Start Kafka + Postgres
-
-```bash
-docker compose up -d
-```
-Ensure Kafka, Schema Registry, and Postgres are running:
-```bash
-docker ps
-
-/agentic-kafka-reference-architecture/kafka-avro-genai-streaming-poc (main)
-$ docker ps
-CONTAINER ID   IMAGE                                             COMMAND                  CREATED             STATUS             PORTS                                              
-NAMES
-9e5d40906ecb   confluentinc/cp-enterprise-control-center:7.6.0   "/etc/confluent/dock…"   11 seconds ago      Up 9 seconds       0.0.0.0:9021->9021/tcp                             
-control-center
-d1fdb7401d49   postgres:16                                       "docker-entrypoint.s…"   About an hour ago   Up About an hour   0.0.0.0:5432->5432/tcp                             
-genai_kafka_postgres
-224fa756ba1a   confluentinc/cp-schema-registry:7.6.0             "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:8081->8081/tcp                             
-schema-registry
-177d914c01cb   confluentinc/cp-kafka:7.6.0                       "/etc/confluent/dock…"   4 days ago          Up 50 minutes      0.0.0.0:9092->9092/tcp, 0.0.0.0:29092->29092/tcp   kafka
-524d4ed82e20   confluentinc/cp-zookeeper:7.6.0                   "/etc/confluent/dock…"   4 days ago          Up About an hour   2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp         
-zookeeper
-```
-
-Services:
-
-- Kafka: `localhost:29092`
-- Schema Registry: `localhost:8081`
-- Postgres: `localhost:5432`
-
-### 2. Start Spring Boot App
-
-```bash
-./gradlew bootRun
-```
-
-Backend will be available at `http://localhost:8080`.
-
-### 3. Start React UI
-
-```bash
-cd account-ui
-npm install
-npm run dev
-```
-
-Frontend will be available at `http://localhost:5173`.
 
 # Plain Kafka Pipeline vs GenAI-Enhanced Pipeline
 ## Plain Kafka pipeline (no GenAI)
