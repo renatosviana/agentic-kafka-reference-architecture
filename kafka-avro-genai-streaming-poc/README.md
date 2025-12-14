@@ -90,6 +90,11 @@ select * from account_summaries order by id desc;
 
 ## GenAI Behavior Testing
 
+Keep Control Center running to check messages arriving:
+<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9eeb1bf1-7180-4145-af9d-ef36c7730c30" />
+
+
+
 To validate GenAI decisions:
 
 - Normal behavior:
