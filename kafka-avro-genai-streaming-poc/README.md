@@ -226,7 +226,7 @@ kafka-avro-genai-streaming-poc/
 │   │   └── constants/
 │   └── resources/
 │       └── application.yml
-├── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres
+├── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres, Confluent Control Center
 ├── postgres-data/               # Local Postgres data volume
 ├── build.gradle.kts
 └── settings.gradle.kts
