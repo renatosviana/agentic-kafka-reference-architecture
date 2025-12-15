@@ -49,7 +49,7 @@ Services:
 ./gradlew bootRun
 ```
 
-Backend will be available at `http://localhost:8080`.
+Backend will be available at [http://localhost:8080](http://localhost:8080).
 
 ### 3. Start React UI
 
