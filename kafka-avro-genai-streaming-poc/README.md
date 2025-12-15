@@ -9,7 +9,7 @@ This project demonstrates an end-to-end streaming architecture that ingests acco
 - Docker and Docker Compose installed.
 - Java 21.
 - Node.js (for the React UI).
-- Valid configuration for the GenAI client (e.g., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
+- Valid configuration for the GenAI client (i.e., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
 
 ## Running the Stack
 
