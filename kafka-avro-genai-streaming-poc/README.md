@@ -292,7 +292,7 @@ flowchart LR
   - Accepts REST requests and publishes Avro-encoded events to `account-events`.
 - **Kafka Streams State Store (KTable)**
   - Uses `groupByKey().aggregate(...)` to maintain real-time balances and a changelog topic.
-- ** GenAI Processing (`AccountProcessingService` + `GenAIClient`)**
+- **GenAI Processing (`AccountProcessingService` + `GenAIClient`)**
   - Receives event plus computed balance and sends a structured prompt to the LLM.
   - The LLM returns a natural-language summary, behavior classification (e.g., NORMAL / SUSPICIOUS), and risk score, which are persisted in Postgres.
 - **UI (React)**
