@@ -134,7 +134,7 @@ This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
 
 - Return a basic risk score
 
-All of that is done with a single prompt; there is no vector database, no embeddings, no LangChain, and no agent tooling – just a direct LLM call.
+All of this is done with a single prompt via a direct LLM call.
 
 ## 1. Create an OpenAI account and API key
 
