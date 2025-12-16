@@ -245,7 +245,7 @@ kafka-avro-genai-streaming-poc/
    - Persists the result into PostgreSQL.
 5. The React UI calls `/summaries/{accountId}` to fetch and display the stored summaries.
 
-### Mermaid Architecture Diagram
+### Architecture Diagram
 
 ```mermaid
 flowchart LR
