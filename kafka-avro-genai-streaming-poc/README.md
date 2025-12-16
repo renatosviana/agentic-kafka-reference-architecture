@@ -346,6 +346,17 @@ sequenceDiagram
     DB-->>API: AI-generated explanations
     API-->>UI: Human-readable timeline
 ```
+## Production Considerations
+
+### High Availability
+
+This POC runs a single Kafka broker (replication factor = 1) for local testing.
+Production deployments require:
+- **3+ Kafka brokers** with `min.insync.replicas=2`
+- **Replication factor 3** for all topics
+- **Multi-AZ deployment** (AWS: MSK across 3 AZs; on-prem: separate racks)
+
+
 ## About
 
 Experimental POC combining Kafka Streams, Avro, and GenAI for real-time account event summarization and risk classification.
