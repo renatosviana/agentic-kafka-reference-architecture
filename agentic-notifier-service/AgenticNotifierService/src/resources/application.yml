@@ -15,9 +15,20 @@ spring:
   mail:
     host: localhost
     port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
 
 agentic:
+  marker: "I_AM_LOADED"
   email:
     enabled: true
     from: "agentic@local.dev"
     to: "ops@local.dev"
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure.mail: DEBUG
+

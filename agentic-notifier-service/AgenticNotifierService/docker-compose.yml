@@ -2,26 +2,27 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_CLIENT_PORT: 2182
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - "2181:2181"
+      - "2182:2182"
 
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
+      - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   mailhog:
-    image: mailhog/mailhog:v1.0.1
+    image: mailhog/mailhog:latest
+    container_name: mailhog
     ports:
-      - "1025:1025"   # SMTP
-      - "8025:8025"   # Web UI http://localhost:8025
+      - "1025:1025"
+      - "8025:8025"
