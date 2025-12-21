@@ -52,13 +52,13 @@ public class GenAiClient {
                     .block(); // TODO: make this reactive later
 
             if (response == null || response.getSummary() == null) {
-                return new GenAiResponse("No summary generated.");
+                return new GenAiResponse("No summary generated.", response.getClassification(), response.getRiskScore());
             }
             return response;
 
         } catch (Exception e) {
             log.error("Error calling GenAI service", e);
-            return new GenAiResponse("GenAI service unavailable; skipping summary.");
+            return new GenAiResponse("GenAI service unavailable; skipping summary.", null, 0);
         }
     }
 

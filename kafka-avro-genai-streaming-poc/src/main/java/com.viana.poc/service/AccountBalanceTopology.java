@@ -48,7 +48,7 @@ public class AccountBalanceTopology {
 
                     return switch (type) {
                         case CREDIT -> current + amount;
-                        case DEBIT  -> current - amount;
+                        case DEBIT -> current - amount;
                     };
                 };
 

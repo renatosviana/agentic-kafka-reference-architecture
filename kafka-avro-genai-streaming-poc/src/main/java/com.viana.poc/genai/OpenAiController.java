@@ -96,17 +96,21 @@ public class OpenAiController {
 
     // DTOs
 
-    public record PromptPayload(String prompt) {}
+    public record PromptPayload(String prompt) {
+    }
 
-    public record GenAiResponse(String summary) {}
+    public record GenAiResponse(String summary) {
+    }
 
     public record ChatRequest(
             String model,
             List<Message> messages
-    ) {}
+    ) {
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record Message(String role, String content) {}
+    public record Message(String role, String content) {
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record ChatResponse(
@@ -115,6 +119,7 @@ public class OpenAiController {
         @JsonIgnoreProperties(ignoreUnknown = true)
         public record Choice(
                 Message message
-        ) {}
+        ) {
+        }
     }
 }

@@ -68,10 +68,13 @@ public class AccountController {
 
     @PostMapping("/summarize-event")
     public GenAiResponse summarize(@RequestBody PromptPayload payload) {
-        String summary = genAiService.generateSummary(payload.prompt()) .getSummary();
+        String summary = genAiService.generateSummary(payload.prompt()).getSummary();
         return new GenAiResponse(summary);
     }
 
-    public record PromptPayload(String prompt) {}
-    public record GenAiResponse(String summary) {}
+    public record PromptPayload(String prompt) {
+    }
+
+    public record GenAiResponse(String summary) {
+    }
 }

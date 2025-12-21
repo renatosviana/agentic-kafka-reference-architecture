@@ -3,17 +3,32 @@
   "namespace": "com.viana.avro",
   "name": "AccountEvent",
   "fields": [
-    { "name": "eventId", "type": "string" },
-    { "name": "accountId", "type": "string" },
-    { "name": "amount", "type": "double" },
+    {
+      "name": "eventId",
+      "type": "string"
+    },
+    {
+      "name": "accountId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
     {
       "name": "eventType",
       "type": {
         "type": "enum",
         "name": "EventType",
-        "symbols": ["CREDIT", "DEBIT"]
+        "symbols": [
+          "CREDIT",
+          "DEBIT"
+        ]
       }
     },
-    { "name": "eventTime", "type": "long" }
+    {
+      "name": "eventTime",
+      "type": "long"
+    }
   ]
 }

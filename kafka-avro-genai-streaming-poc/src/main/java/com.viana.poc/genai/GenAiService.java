@@ -47,14 +47,31 @@ public class GenAiService {
         int maxRetries = 3;
         long backoffMillis = 1000;
 
+        System.out.println("Test GenAI");
+
         for (int attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                String summary = callOpenAiOnce(prompt);
+                String json = callOpenAiOnce(
+                        prompt
+                                + "\n\nReturn ONLY valid JSON like:"
+                                + "\n{\"summary\":\"...\",\"classification\":\"NORMAL|ANOMALOUS|REWARD_ELIGIBLE|NEGATIVE_BALANCE\",\"riskScore\":0}"
+                );
 
-                String classification =
-                        updatedBalance < 0 ? "NEGATIVE_BALANCE" : "NORMAL";
-                int riskScore =
-                        updatedBalance < 0 ? 70 : 10;
+                log.info("GenAI raw response: >>>{}<<<", json);
+
+
+                // parse json -> summary/classification/riskScore
+                var node = new com.fasterxml.jackson.databind.ObjectMapper().readTree(json);
+
+                String summary = node.path("summary").asText("");
+                String classification = node.path("classification").asText("NORMAL");
+                int riskScore = node.path("riskScore").asInt(50);
+
+                // optional guardrail: negative balance always at least NEGATIVE_BALANCE
+                if (updatedBalance < 0 && !"NEGATIVE_BALANCE".equals(classification)) {
+                    classification = "NEGATIVE_BALANCE";
+                    riskScore = Math.max(riskScore, 70);
+                }
 
                 return GenAiResult.success(summary, classification, riskScore);
             } catch (Exception ex) {
@@ -124,13 +141,15 @@ public class GenAiService {
     public record ChatRequest(
             String model,
             List<Message> messages
-    ) {}
+    ) {
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Message(
             String role,
             String content
-    ) {}
+    ) {
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record ChatResponse(
@@ -139,6 +158,7 @@ public class GenAiService {
         @JsonIgnoreProperties(ignoreUnknown = true)
         public record Choice(
                 Message message
-        ) {}
+        ) {
+        }
     }
 }

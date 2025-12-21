@@ -44,4 +44,10 @@ server:
   error:
     include-message: always
 
+logging:
+  level:
+    root: INFO
+    c.v.p.service: INFO
+
+
 

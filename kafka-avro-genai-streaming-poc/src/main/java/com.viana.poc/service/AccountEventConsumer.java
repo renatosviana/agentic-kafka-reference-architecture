@@ -30,7 +30,7 @@ public class AccountEventConsumer {
         double previousBalance = balances.getOrDefault(accountId, 0.0);
         double updated = switch (event.getEventType()) {
             case CREDIT -> previousBalance + event.getAmount();
-            case DEBIT  -> previousBalance - event.getAmount();
+            case DEBIT -> previousBalance - event.getAmount();
         };
         balances.put(accountId, updated);
 
