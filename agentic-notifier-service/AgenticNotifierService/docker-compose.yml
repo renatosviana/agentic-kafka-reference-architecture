@@ -1,4 +1,7 @@
 services:
+  agentic:
+    image: agentic-notifier:local
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
