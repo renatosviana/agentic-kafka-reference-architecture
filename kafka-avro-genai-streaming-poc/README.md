@@ -9,7 +9,7 @@ This project demonstrates an end-to-end streaming architecture that ingests acco
 - Docker and Docker Compose installed.
 - Java 21.
 - Node.js (for the React UI).
-- Valid configuration for the GenAI client (e.g., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
+- Valid configuration for the GenAI client (i.e., OpenAI API key) set via environment variables or `application.yml` (do not commit secrets).
 
 ## Running the Stack
 
@@ -49,7 +49,7 @@ Services:
 ./gradlew bootRun
 ```
 
-Backend will be available at `http://localhost:8080`.
+Backend will be available at [http://localhost:8080](http://localhost:8080).
 
 ### 3. Start React UI
 
@@ -134,7 +134,7 @@ This project uses OpenAI’s GPT-4.1-mini model via the Chat Completions API to:
 
 - Return a basic risk score
 
-All of that is done with a single prompt; there is no vector database, no embeddings, no LangChain, and no agent tooling – just a direct LLM call.
+All of this is achieved with a single prompt, no orchestration, just a direct LLM call.
 
 ## 1. Create an OpenAI account and API key
 
@@ -226,7 +226,7 @@ kafka-avro-genai-streaming-poc/
 │   │   └── constants/
 │   └── resources/
 │       └── application.yml
-├── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres
+├── docker-compose.yml           # Kafka, Zookeeper, Schema Registry, Postgres, Confluent Control Center
 ├── postgres-data/               # Local Postgres data volume
 ├── build.gradle.kts
 └── settings.gradle.kts
@@ -245,7 +245,7 @@ kafka-avro-genai-streaming-poc/
    - Persists the result into PostgreSQL.
 5. The React UI calls `/summaries/{accountId}` to fetch and display the stored summaries.
 
-### Mermaid Architecture Diagram
+### Architecture Diagram
 
 ```mermaid
 flowchart LR
@@ -292,7 +292,7 @@ flowchart LR
   - Accepts REST requests and publishes Avro-encoded events to `account-events`.
 - **Kafka Streams State Store (KTable)**
   - Uses `groupByKey().aggregate(...)` to maintain real-time balances and a changelog topic.
-- **Agentic GenAI Processing (`AccountProcessingService` + `GenAIClient`)**
+- **GenAI Processing (`AccountProcessingService` + `GenAIClient`)**
   - Receives event plus computed balance and sends a structured prompt to the LLM.
   - The LLM returns a natural-language summary, behavior classification (e.g., NORMAL / SUSPICIOUS), and risk score, which are persisted in Postgres.
 - **UI (React)**
@@ -346,6 +346,17 @@ sequenceDiagram
     DB-->>API: AI-generated explanations
     API-->>UI: Human-readable timeline
 ```
+## Production Considerations
+
+### High Availability
+
+This POC runs a single Kafka broker (replication factor = 1) for local testing.
+Production deployments require:
+- **3+ Kafka brokers** with `min.insync.replicas=2`
+- **Replication factor 3** for all topics
+- **Multi-AZ deployment** (AWS: MSK across 3 AZs; on-prem: separate racks)
+
+
 ## About
 
 Experimental POC combining Kafka Streams, Avro, and GenAI for real-time account event summarization and risk classification.
