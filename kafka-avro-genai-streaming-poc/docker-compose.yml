@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  genai:
+    image: genai-service:local
+    ports:
+      - "8082:8082"
+
+  agentic:
+    image: agentic-notifier:local
+    ports:
+      - "8088:8088"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     container_name: zookeeper
@@ -11,7 +21,7 @@ services:
       - "2181:2181"
 
   kafka:
-    image: confluentinc/cp-kafka:7.6.0
+    image: confluentinc/cp-kafka:latest
     container_name: kafka
     depends_on:
       - zookeeper
@@ -29,6 +39,20 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       # Production requires 3 Kafka brokers with RF=3
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  init-topics:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/bash", "-lc"]
+    command: >
+      "
+      echo 'Creating topics...' &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.decision.v1 --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.action_result.v1 --partitions 1 --replication-factor 1 &&
+      echo 'Done.'
+      "
+      
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.6.0

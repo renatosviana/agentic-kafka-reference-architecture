@@ -1,10 +1,9 @@
 genai:
-  base-url: http://localhost:8080
+  base-url: http://localhost:8082
 
 openai:
   api-key: ${OPENAI_API_KEY}
   model: gpt-4.1-mini
-
 
 spring:
   kafka:
@@ -26,6 +25,7 @@ spring:
 
     streams:
       application-id: account-balance-app
+      state-dir: ${java.io.tmpdir}/kafka-streams/${spring.application.name}-${random.value}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/genai_kafka
@@ -41,6 +41,7 @@ spring:
         format_sql: true
 
 server:
+  port: 8082
   error:
     include-message: always
 
