@@ -1,6 +1,12 @@
+server:
+  port: 8088
+
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    kafka:
+      admin:
+        auto-create: true #For dev only
+    bootstrap-servers: localhost:29092
     consumer:
       group-id: agentic-notifier-service
       auto-offset-reset: earliest
@@ -8,6 +14,8 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "com.viana.agentic.model"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.viana.agentic.model.EnrichedAccountEvent
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -22,7 +30,6 @@ spring:
       mail.smtp.starttls.enable: false
 
 agentic:
-  marker: "I_AM_LOADED"
   email:
     enabled: true
     from: "agentic@local.dev"
