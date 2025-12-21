@@ -42,4 +42,6 @@ build/
 Thumbs.db
 
 # Logs
-*.log
+*.log*.hprof *.hprof
+hs_err_pid*.log
+replay_pid*.log
