@@ -1,0 +1,38 @@
+spring:
+  spring:
+    profiles:
+      active: local
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: agentic-notifier-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.viana.agentic.model"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  mail:
+    host: localhost
+    port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
+
+agentic:
+  marker: "I_AM_LOADED"
+  email:
+    enabled: true
+    from: "agentic@local.dev"
+    to: "ops@local.dev"
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure.mail: DEBUG
+

@@ -7,6 +7,8 @@ import com.viana.agentic.model.ActionResult;
 import com.viana.agentic.model.AgentAction;
 import com.viana.agentic.model.AgentDecision;
 import com.viana.agentic.model.EnrichedAccountEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -17,21 +19,26 @@ import static com.viana.agentic.config.KafkaTopics.INPUT_ENRICHED;
 @Component
 public class EnrichedEventListener {
 
-    private final DecisionEngine decisionEngine = new DecisionEngine(); // keep PR1 simple
+    private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
+
+    private final DecisionEngine decisionEngine;
     private final ActionExecutor actionExecutor;
     private final AuditPublisher auditPublisher;
 
-    public EnrichedEventListener(ActionExecutor actionExecutor, AuditPublisher auditPublisher) {
+    public EnrichedEventListener(DecisionEngine decisionEngine, ActionExecutor actionExecutor, AuditPublisher auditPublisher) {
+        this.decisionEngine = decisionEngine;
         this.actionExecutor = actionExecutor;
         this.auditPublisher = auditPublisher;
     }
 
-//    @KafkaListener(topics = INPUT_ENRICHED)
     @KafkaListener(topics = KafkaTopics.INPUT_ENRICHED, groupId = "agentic-notifier-service")
     public void onMessage(EnrichedAccountEvent event) {
+
+        log.info("Received enriched event: {}", event);
+
         AgentDecision decision = decisionEngine.decide(event);
 
-        auditPublisher.publishDecision(decision);
+        auditPublisher.publishDecision(event, decision);
 
         for (AgentAction action : decision.actions()) {
             try {

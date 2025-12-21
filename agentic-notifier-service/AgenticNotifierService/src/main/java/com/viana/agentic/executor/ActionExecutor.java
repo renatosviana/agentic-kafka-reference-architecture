@@ -3,12 +3,16 @@ package com.viana.agentic.executor;
 import com.viana.agentic.model.AgentAction;
 import com.viana.agentic.model.AgentDecision;
 import com.viana.agentic.model.EnrichedAccountEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
 public class ActionExecutor {
+
+    private static final Logger log = LoggerFactory.getLogger(ActionExecutor.class);
 
     private final EmailNotifier emailNotifier;
 
@@ -27,6 +31,9 @@ public class ActionExecutor {
                         "EventId: " + event.eventId() + "\n" +
                         "Summary: " + event.summary() + "\n" +
                         "Rationale: " + decision.rationale() + "\n";
+
+                log.info("Sending email subject", subject);
+
                 emailNotifier.send(subject, body);
             }
             default -> throw new IllegalArgumentException("Action not supported: " + action.type());

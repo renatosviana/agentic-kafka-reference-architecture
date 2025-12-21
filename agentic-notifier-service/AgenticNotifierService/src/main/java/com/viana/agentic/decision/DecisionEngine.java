@@ -3,6 +3,7 @@ package com.viana.agentic.decision;
 import com.viana.agentic.model.AgentAction;
 import com.viana.agentic.model.AgentDecision;
 import com.viana.agentic.model.EnrichedAccountEvent;
+import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Component
 public class DecisionEngine {
 
     private static final String ACTION_NO_ACTION = "NO_ACTION";
