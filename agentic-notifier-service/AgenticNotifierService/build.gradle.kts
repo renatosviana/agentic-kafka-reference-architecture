@@ -27,6 +27,17 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation ("org.mockito:mockito-core:5.12.0")
+    testImplementation ("org.mockito:mockito-junit-jupiter:5.12.0")
+
+    compileOnly ("org.projectlombok:lombok:1.18.32")
+    annotationProcessor ("org.projectlombok:lombok:1.18.32")
+
+    testCompileOnly ("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor ("org.projectlombok:lombok:1.18.32")
+
 }
 
 tasks.withType<Test> { useJUnitPlatform() }
