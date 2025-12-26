@@ -76,5 +76,19 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(enrichedEventProducerFactory());
     }
 
+    @Bean
+    public ProducerFactory<String, String> jsonProducerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
+    public KafkaTemplate<String, String> jsonKafkaTemplate() {
+        return new KafkaTemplate<>(jsonProducerFactory());
+    
+
 
 }
