@@ -32,16 +32,14 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-
         props.put("schema.registry.url", schemaRegistryUrl);
-
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
     public KafkaTemplate<String, AccountEvent> accountEventKafkaTemplate(
-            ProducerFactory<String, AccountEvent> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+            ProducerFactory<String, AccountEvent> accountEventProducerFactory) {
+        return new KafkaTemplate<>(accountEventProducerFactory);
     }
 
     @Bean
@@ -55,8 +53,9 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, AccountEventSummary> kafkaTemplate() {
-        return new KafkaTemplate<>(accountEventSummaryProducerFactory());
+    public KafkaTemplate<String, AccountEventSummary> accountEventSummaryKafkaTemplate(
+            ProducerFactory<String, AccountEventSummary> accountEventSummaryProducerFactory) {
+        return new KafkaTemplate<>(accountEventSummaryProducerFactory);
     }
 
     @Bean
@@ -65,31 +64,13 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-
         props.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
-
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
-    public KafkaTemplate<String, EnrichedAccountEvent> enrichedEventKafkaTemplate() {
-        return new KafkaTemplate<>(enrichedEventProducerFactory());
+    public KafkaTemplate<String, EnrichedAccountEvent> enrichedEventKafkaTemplate(
+            ProducerFactory<String, EnrichedAccountEvent> enrichedEventProducerFactory) {
+        return new KafkaTemplate<>(enrichedEventProducerFactory);
     }
-
-    @Bean
-    public ProducerFactory<String, String> jsonProducerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        return new DefaultKafkaProducerFactory<>(props);
-    }
-
-    @Bean
-    public KafkaTemplate<String, String> jsonKafkaTemplate() {
-        return new KafkaTemplate<>(jsonProducerFactory());
-    }
-    
-
-
 }
