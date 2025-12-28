@@ -15,8 +15,11 @@ Most GenAI examples ignore:
 - Idempotency
 - Schema evolution
 - Streaming consistency
-
+- 
 This project shows how to do GenAI *at scale*.
+
+## What problem this solves
+This reference architecture shows how to combine Kafka event streaming with GenAI enrichment and an agentic decision layer, producing auditable decisions and observable actions (email notifications) using Spring Boot, Kafka Streams, and local-first tooling.
 
 ## Architecture
 ### Architecture Diagram
@@ -86,6 +89,42 @@ flowchart LR
 - GenAI (enrichment) turns raw account activity into a structured signal: riskScore, summary, timestamp and publishes to account.enriched.v1.
 
 - Agentic AI (decision + action) consumes enriched events, makes deterministic decisions (auditable), and executes actions (ex: email) while emitting an audit trail to Kafka (agent.decision.v1, agent.action_result.v1).
+
+## Kafka Topics
+
+Input / domain:
+- `account-events` — raw credit/debit events
+
+State:
+- `account-balance-store-changelog` — Kafka Streams changelog
+- `account-balance-store` — KTable state
+
+GenAI enrichment:
+- `account.enriched.v1` — enriched signal {eventId, accountId, riskScore, summary, timestamp}
+
+Agentic audit:
+- `agent.decision.v1` — agent decisions (what/why)
+- `agent.action_result.v1` — action results (success/failure)
+
+## Quickstart: Verify the full flow
+
+1) Start infrastructure (Kafka + Control Center + Postgres + MailHog).
+2) Start services:
+   - `kafka-avro-genai-streaming-poc`
+   - `agentic-notifier-service`
+
+3) Trigger events (Postman):
+   - `POST /accounts/ACC123/credit?amount=48`
+
+4) Observe in Confluent Control Center:
+   - `account-events` receives events
+   - `account.enriched.v1` receives enriched events
+   - `agent.decision.v1` receives decisions
+   - `agent.action_result.v1` receives action results
+
+5) Verify email:
+   - Open MailHog UI: `http://localhost:8025`
+
 
 ## Key Concepts
 - Kafka Streams (KTable for state)
