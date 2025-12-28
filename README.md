@@ -183,12 +183,21 @@ Later, the business needs a new field:
   "amount": 50,
   "currency": "CAD"
 }
+
 ```
- 
-#### Expected runtime failure when posting an event (breaking schema evolution)
+**Corresponding Avro field added to the existing record (breaking change):**
+```json
+{
+  "name": "currency",
+  "type": "string"
+}
+ ```
+#### Runtime failure caused by breaking schema evolution
 
 When sending a request via Postman, the application fails while converting the request payload into an Avro record because the new field `currency` was added without a default value.
 <img width="1426" height="523" alt="image" src="https://github.com/user-attachments/assets/e9c86792-5705-493f-8f5f-99de0a35f0cb" />
+
+This simulates a real production deployment where a new service version is deployed while existing producers, consumers, or request payloads do not yet include the new field.
 
 The failure occurs during Avro record construction (before the message is sent to Kafka):
 
@@ -221,6 +230,7 @@ Path in schema: --> currency
 
 To safely evolve the schema, the new field was made nullable and a default value was provided:
 
+**Corresponding Avro field (compatible change):**
 ```json
 {
   "name": "currency",
@@ -228,6 +238,7 @@ To safely evolve the schema, the new field was made nullable and a default value
   "default": null
 }
 ```
+
 #### Why this works:
 
 - Older messages do not contain the currency field.
