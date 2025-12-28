@@ -90,6 +90,147 @@ flowchart LR
 
 - Agentic AI (decision + action) consumes enriched events, makes deterministic decisions (auditable), and executes actions (ex: email) while emitting an audit trail to Kafka (agent.decision.v1, agent.action_result.v1).
 
+## Why this architecture uses both Avro and JSON
+
+This project intentionally uses Avro and JSON in different stages, based on what each stage optimizes for.
+
+### Avro: high-throughput, schema-governed event streams
+
+Avro is used for core domain and stateful streaming topics, where correctness and evolution matter most:
+
+- account-events
+
+- account-balance-store-changelog
+
+- internal Kafka Streams state
+
+### Why Avro here:
+
+- Strong schemas with compatibility guarantees
+
+- Compact binary encoding (high throughput)
+
+- Safe schema evolution over time
+
+- First-class support with Kafka Streams and Schema Registry
+
+These topics represent facts and state, not interpretations.
+
+### JSON: semantic, AI-friendly decision and action messages
+
+JSON is used for GenAI outputs and agentic workflows, such as:
+
+- account.enriched.v1
+
+- agent.decision.v1
+
+- agent.action_result.v1
+
+### Why JSON here:
+
+LLMs reason better with explicit, readable structures
+
+- Easier prompt composition and inspection
+
+- Flexible payloads for rationale, explanations, and context
+
+- Human-readable for debugging, audits, and ops teams
+
+These messages represent interpretations, decisions, and actions, not raw facts.
+
+### Design principle: facts vs reasoning
+
+This split reflects a deliberate architectural principle:
+
+#### Data formats by architectural layer
+
+| Layer                         | Format | Reason                                      |
+|------------------------------|--------|---------------------------------------------|
+| Domain events & state        | Avro   | Correctness, performance, schema evolution  |
+| GenAI enrichment             | JSON   | Semantic clarity, explainability             |
+| Agentic decisions & actions  | JSON   | Auditability, observability                  |
+
+This avoids forcing AI-centric concerns into low-level event streams, while keeping GenAI and agentic logic flexible and inspectable.
+
+#### What is schema evolution (in simple terms)
+
+Schema evolution means you can change the structure of your data over time without breaking running systems.
+
+In real systems, data formats never stay the same:
+
+- new fields are added
+
+- old fields become optional
+
+- some fields are deprecated
+
+Schema evolution defines rules that allow producers and consumers to keep working even when data changes.
+
+#### Example (no Kafka knowledge required)
+
+Imagine you start with this event:
+```json
+{
+  "accountId": "ACC123",
+  "amount": 50
+}
+```
+
+Later, the business needs a new field:
+```json
+{
+  "accountId": "ACC123",
+  "amount": 50,
+  "currency": "CAD"
+}
+```
+
+Without schema evolution:
+
+- older consumers may crash
+
+- newer producers may break older apps
+
+- teams are forced to upgrade everything at once
+
+With schema evolution:
+
+- old consumers safely ignore currency
+
+- new consumers can use it
+
+- systems evolve independently
+
+#### Why Avro + Schema Registry matters here
+
+When using Avro with a Schema Registry:
+
+- every message follows a registered schema
+
+- compatibility rules are enforced automatically
+
+- breaking changes are rejected before they reach production
+
+This guarantees:
+
+- Correctness: consumers always know what fields exist and their types
+
+- Performance: compact binary format, efficient at scale
+
+- Safe evolution: fields can be added/removed in controlled ways
+
+#### Why this is critical for domain events
+
+Domain events (like account credits, debits, balances):
+
+- represent facts
+
+- are consumed by many systems
+
+- must not change unpredictably
+
+Schema evolution allows these facts to evolve without outages.
+
 ## Kafka Topics
 
 Input / domain:
