@@ -188,6 +188,7 @@ Later, the business needs a new field:
 #### Expected runtime failure when posting an event (breaking schema evolution)
 
 When sending a request via Postman, the application fails while converting the request payload into an Avro record because the new field `currency` was added without a default value.
+<img width="1426" height="523" alt="image" src="https://github.com/user-attachments/assets/e9c86792-5705-493f-8f5f-99de0a35f0cb" />
 
 The failure occurs during Avro record construction (before the message is sent to Kafka):
 
@@ -205,7 +206,45 @@ Path in schema: --> currency
 **Key failure point:**  
 `AccountEvent$Builder.build(AccountEvent.java:607)`
 
-Without schema evolution:
+#### Request-to-Kafka Avro Serialization Flow
+Postman JSON
+   ↓
+Spring Controller
+   ↓
+Avro Builder (generated class)
+   ↓
+Kafka Avro Serializer
+   ↓
+Schema Registry
+
+#### Fix: make the new field backward compatible
+
+To safely evolve the schema, the new field was made nullable and a default value was provided:
+
+```json
+{
+  "name": "currency",
+  "type": ["null", "string"],
+  "default": null
+}
+```
+#### Why this works:
+
+- Older messages do not contain the currency field.
+
+- Avro uses the default value (null) when reading older data.
+
+- The Avro Builder no longer throws an exception when the field is not set.
+
+- The schema remains backward compatible and is accepted by Schema Registry.
+
+#### Result:
+
+- POST requests sent via Postman succeed.
+- Events are serialized and published to Kafka.
+<img width="1032" height="560" alt="image" src="https://github.com/user-attachments/assets/3999d6db-77cc-4957-8f78-bbfc9cc03064" />
+
+**Without schema evolution:**
 
 - older consumers may crash
 
@@ -213,7 +252,7 @@ Without schema evolution:
 
 - teams are forced to upgrade everything at once
 
-With schema evolution:
+**With schema evolution:**
 
 - old consumers safely ignore currency
 
