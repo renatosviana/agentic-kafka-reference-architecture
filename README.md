@@ -319,23 +319,71 @@ Agentic audit:
 
 ## Quickstart: Verify the full flow
 
-1) Start infrastructure (Kafka + Control Center + Postgres + MailHog).
-2) Start services:
-   - `kafka-avro-genai-streaming-poc`
-   - `agentic-notifier-service`
+### 1) Start infrastructure (Docker Compose)
 
-3) Trigger events (Postman):
-   - `POST /accounts/ACC123/credit?amount=48`
+From the repo root:
 
-4) Observe in Confluent Control Center:
-   - `account-events` receives events
-   - `account.enriched.v1` receives enriched events
-   - `agent.decision.v1` receives decisions
-   - `agent.action_result.v1` receives action results
+```bash
+docker compose up -d
+docker compose ps
+```
+(Optional) follow infrastructure logs:
+```bash
+docker compose logs -f
+```
 
-5) Verify email:
-   - Open MailHog UI: `http://localhost:8025`
+Useful UIs:
 
+- [Confluent Control Center](http://localhost:9021)
+
+- [MailHog UI](http://localhost:8025)
+
+### 2) Run Local CI (MANDATORY before pushing)
+
+From the repo root:
+```bash
+./ci-local.sh
+```
+**Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
+
+### 3) Start the services (two terminals)
+**Terminal 1 — GenAI + Streaming app**
+```bash
+cd kafka-avro-genai-streaming-poc
+./gradlew --no-daemon clean bootRun
+```
+**Terminal 2 — Agentic Notifier service**
+```bash
+cd agentic-notifier-service
+./gradlew --no-daemon clean bootRun
+```
+### 4) Trigger events (Postman / curl)
+Example (credit):
+```bash
+curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=48"
+```
+- Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc/doc)):
+<img width="1407" height="492" alt="image" src="https://github.com/user-attachments/assets/1d1e5d9b-96c8-41a8-861e-0cffd71844c8" />
+
+(Adjust host/port if your app uses a different server port.)
+
+### 5) Observe in Confluent Control Center
+Confirm messages appear in:
+
+- account-events
+- account.enriched.v1
+- agent.decision.v1
+- agent.action_result.v1
+
+**Example:**
+- Observe in Control Center:
+<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9a6e7806-6b7e-47ee-818a-6a7032d1abf1">
+<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/65c5e983-ea8e-4b42-84c1-6b9baf1a6211">
+
+### 6) Verify email
+
+Open MailHog UI:
+- [MailHog UI](http://localhost:8025)
 
 ## Key Concepts
 - Kafka Streams (KTable for state)
