@@ -321,9 +321,10 @@ Agentic audit:
 
 ### 1) Start infrastructure (Docker Compose)
 
-From the repo root:
+From the GenAI path:
 
 ```bash
+cd kafka-avro-genai-streaming-poc
 docker compose up -d
 docker compose ps
 ```
