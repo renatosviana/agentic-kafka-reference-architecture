@@ -192,7 +192,18 @@ When sending a request via Postman, the application fails while converting the r
 
 The failure occurs during Avro record construction (before the message is sent to Kafka):
 
-
+#### Request-to-Kafka Avro Serialization Flow
+```
+Postman JSON
+   ↓
+Spring Controller
+   ↓
+Avro Builder (generated class)
+   ↓
+Kafka Avro Serializer
+   ↓
+Schema Registry
+```
 When adding a new field (e.g., `currency`) **without a default value**, producing an event using the generated Avro `Builder` fails because Avro cannot supply a default for the missing field.
 
 ```
@@ -205,17 +216,6 @@ Path in schema: --> currency
 ```
 **Key failure point:**  
 `AccountEvent$Builder.build(AccountEvent.java:607)`
-
-#### Request-to-Kafka Avro Serialization Flow
-Postman JSON
-   ↓
-Spring Controller
-   ↓
-Avro Builder (generated class)
-   ↓
-Kafka Avro Serializer
-   ↓
-Schema Registry
 
 #### Fix: make the new field backward compatible
 
