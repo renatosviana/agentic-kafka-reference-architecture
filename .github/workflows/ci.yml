@@ -22,7 +22,6 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      
       # Build: kafka-avro-genai-streaming-poc
       - name: Build kafka-avro-genai-streaming-poc
         working-directory: kafka-avro-genai-streaming-poc
