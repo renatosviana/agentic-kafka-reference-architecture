@@ -15,7 +15,7 @@ Most GenAI examples ignore:
 - Idempotency
 - Schema evolution
 - Streaming consistency
-- 
+
 This project shows how to do GenAI *at scale*.
 
 ## What problem this solves
@@ -166,7 +166,7 @@ In real systems, data formats never stay the same:
 
 Schema evolution defines rules that allow producers and consumers to keep working even when data changes.
 
-#### Example (no Kafka knowledge required)
+#### Example 
 
 Imagine you start with this event:
 ```json
@@ -184,6 +184,26 @@ Later, the business needs a new field:
   "currency": "CAD"
 }
 ```
+ 
+#### Expected runtime failure when posting an event (breaking schema evolution)
+
+When sending a request via Postman, the application fails while converting the request payload into an Avro record because the new field `currency` was added without a default value.
+
+The failure occurs during Avro record construction (before the message is sent to Kafka):
+
+
+When adding a new field (e.g., `currency`) **without a default value**, producing an event using the generated Avro `Builder` fails because Avro cannot supply a default for the missing field.
+
+```
+Path in schema: --> currency
+        at org.apache.avro.generic.GenericData.getDefaultValue(GenericData.java:1286)
+        at org.apache.avro.data.RecordBuilderBase.defaultValue(RecordBuilderBase.java:138)
+        at com.viana.avro.AccountEvent$Builder.build(AccountEvent.java:607)
+        at com.viana.poc.controller.AccountController.credit(AccountController.java:36)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+```
+**Key failure point:**  
+`AccountEvent$Builder.build(AccountEvent.java:607)`
 
 Without schema evolution:
 
