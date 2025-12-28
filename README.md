@@ -197,7 +197,7 @@ Later, the business needs a new field:
 When sending a request via Postman, the application fails while converting the request payload into an Avro record because the new field `currency` was added without a default value.
 <img width="1426" height="523" alt="image" src="https://github.com/user-attachments/assets/e9c86792-5705-493f-8f5f-99de0a35f0cb" />
 
-This simulates a real production deployment where a new service version is deployed while existing producers, consumers, or request payloads do not yet include the new field.
+**This simulates a real production deployment where a new service version is deployed while existing producers, consumers, or request payloads do not yet include the new field.**
 
 The failure occurs during Avro record construction (before the message is sent to Kafka):
 
