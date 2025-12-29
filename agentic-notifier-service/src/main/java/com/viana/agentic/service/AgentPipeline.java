@@ -4,7 +4,7 @@ import com.viana.agentic.decision.DecisionEngine;
 import com.viana.agentic.executor.ActionExecutor;
 import com.viana.agentic.kafka.AuditPublisher;
 import com.viana.agentic.model.AgentDecision;
-import com.viana.agentic.model.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import org.springframework.stereotype.Service;
 
 @Service

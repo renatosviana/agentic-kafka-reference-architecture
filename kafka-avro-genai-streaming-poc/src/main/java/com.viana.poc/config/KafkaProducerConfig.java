@@ -2,7 +2,7 @@ package com.viana.poc.config;
 
 import com.viana.avro.AccountEvent;
 import com.viana.avro.AccountEventSummary;
-import com.viana.poc.events.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

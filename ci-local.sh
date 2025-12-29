@@ -4,11 +4,9 @@ set -euo pipefail
 trap 'echo -e "❌ Local CI failed"' ERR
 
 echo "=== kafka-avro-genai-streaming-poc ==="
-cd kafka-avro-genai-streaming-poc
-./gradlew --no-daemon clean build
+./gradlew --no-daemon :kafka-avro-genai-streaming-poc:clean :kafka-avro-genai-streaming-poc:build
 
 echo "=== agentic-notifier-service ==="
-cd ../agentic-notifier-service
-./gradlew --no-daemon clean build
+./gradlew --no-daemon :agentic-notifier-service:clean :agentic-notifier-service:build
 
 echo "✅ Local CI passed"

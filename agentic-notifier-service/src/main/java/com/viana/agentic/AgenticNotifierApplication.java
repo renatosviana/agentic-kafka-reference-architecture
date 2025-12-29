@@ -17,13 +17,10 @@ public class AgenticNotifierApplication {
     CommandLineRunner printProps(
             @Value("${agentic.email.from:NOT_FOUND}") String from,
             @Value("${agentic.email.to:NOT_FOUND}") String to
-            //,            @Value("${agentic.maker}") String maker
-
     ) {
         return args -> {
             System.out.println("agentic.email.from=" + from);
             System.out.println("agentic.email.to=" + to);
-            //System.out.println("agentic.maker=" + maker);
         };
     }
 }

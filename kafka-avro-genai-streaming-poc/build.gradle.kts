@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":common-events"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")

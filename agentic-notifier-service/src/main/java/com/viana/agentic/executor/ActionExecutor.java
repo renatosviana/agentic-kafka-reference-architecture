@@ -2,7 +2,7 @@ package com.viana.agentic.executor;
 
 import com.viana.agentic.model.AgentAction;
 import com.viana.agentic.model.AgentDecision;
-import com.viana.agentic.model.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

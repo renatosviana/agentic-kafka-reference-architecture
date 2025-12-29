@@ -4,7 +4,7 @@ import com.viana.agentic.KafkaTopics;
 import com.viana.agentic.executor.ActionExecutor;
 import com.viana.agentic.model.ActionResult;
 import com.viana.agentic.model.AgentDecision;
-import com.viana.agentic.model.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
