@@ -1,4 +1,5 @@
 [![CI](https://github.com/renatosviana/agentic-kafka-reference-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/renatosviana/agentic-kafka-reference-architecture/actions/workflows/ci.yml)
+👋 If this architecture helped you, please ⭐ the repo or open a Discussion with questions or feedback.
 
 # Agentic Kafka Reference Architecture
 
