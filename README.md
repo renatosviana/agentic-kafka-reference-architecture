@@ -348,16 +348,23 @@ From the repo root:
 **Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
 
 ### 3) Start the services (two terminals)
-**Terminal 1 — GenAI + Streaming app**
+
+Run all Gradle commands from the repo root using qualified tasks.
+
+Terminal 1 — GenAI + Kafka Streaming app
 ```bash
-cd kafka-avro-genai-streaming-poc
-./gradlew --no-daemon clean bootRun
+./gradlew --no-daemon :kafka-avro-genai-streaming-poc:bootRun
 ```
-**Terminal 2 — Agentic Notifier service**
+Terminal 2 — Agentic Notifier service
 ```bash
-cd agentic-notifier-service
-./gradlew --no-daemon clean bootRun
+./gradlew --no-daemon :agentic-notifier-service:bootRun
 ```
+
+(Optional) Clean + test everything
+```bash
+./gradlew --no-daemon clean test
+```
+
 ### 4) Trigger events (Postman / curl)
 Example (credit):
 ```bash
