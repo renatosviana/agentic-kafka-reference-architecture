@@ -4,7 +4,7 @@
 
 ## What this is
 A production-style reference architecture combining:
-- Event-driven microservices (Kafka / Redpanda)
+- Event-driven microservices (Kafka)
 - GenAI (LLM-based reasoning)
 - Agentic workflows
 - Java + Spring Boot
