@@ -13,9 +13,9 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.viana.agentic.model"
+        spring.json.trusted.packages: "com.viana.*"
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.viana.agentic.model.EnrichedAccountEvent
+        spring.json.value.default.type: com.viana.common.events.EnrichedAccountEvent
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

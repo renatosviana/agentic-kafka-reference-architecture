@@ -2,10 +2,9 @@ package com.viana.agentic.api;
 
 import com.viana.agentic.executor.ActionExecutor;
 import com.viana.agentic.kafka.EnrichedEventListener;
-import com.viana.agentic.model.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

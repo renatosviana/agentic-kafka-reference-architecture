@@ -6,15 +6,13 @@ import com.viana.agentic.executor.ActionExecutor;
 import com.viana.agentic.model.ActionResult;
 import com.viana.agentic.model.AgentAction;
 import com.viana.agentic.model.AgentDecision;
-import com.viana.agentic.model.EnrichedAccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-
-import static com.viana.agentic.config.KafkaTopics.INPUT_ENRICHED;
 
 @Component
 public class EnrichedEventListener {

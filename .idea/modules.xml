@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/agentic-kafka-reference-architecture.iml" filepath="$PROJECT_DIR$/.idea/agentic-kafka-reference-architecture.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/agentic-kafka-reference-architecture.agentic-notifier-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/agentic-kafka-reference-architecture.agentic-notifier-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/agentic-kafka-reference-architecture.agentic-notifier-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/agentic-kafka-reference-architecture.agentic-notifier-service.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common-events/agentic-kafka-reference-architecture.common-events.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common-events/agentic-kafka-reference-architecture.common-events.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-avro-genai-streaming-poc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-avro-genai-streaming-poc.main.iml" />
     </modules>
   </component>

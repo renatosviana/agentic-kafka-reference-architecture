@@ -1,14 +1,14 @@
 package com.viana.poc.service;
 
 import com.viana.avro.AccountEvent;
+import com.viana.common.events.EnrichedAccountEvent;
+import com.viana.common.events.EventType;
 import com.viana.poc.entity.AccountSummaryEntity;
-import com.viana.poc.events.EnrichedAccountEvent;
 import com.viana.poc.genai.EnrichedEventPublisher;
 import com.viana.poc.genai.GenAiClient;
 import com.viana.poc.genai.GenAiRequest;
 import com.viana.poc.genai.GenAiResponse;
 import com.viana.poc.repository.AccountSummaryRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,13 +46,17 @@ public class AccountProcessingService {
 
         GenAiResponse response = genAiClient.summarizeEvent(request);
 
-        EnrichedAccountEvent enriched = new EnrichedAccountEvent(
-                UUID.randomUUID().toString(),
-                event.getAccountId(),
-                response.getRiskScore(),
-                response.getSummary(),
-                now
-        );
+        EnrichedAccountEvent enriched = EnrichedAccountEvent.builder()
+                .eventId(UUID.randomUUID().toString())
+                .accountId(event.getAccountId())
+                .riskScore(response.getRiskScore())
+                .summary(response.getSummary())
+                .eventType(EventType.valueOf(event.getEventType().toString()))
+                .amount(event.getAmount())
+                .currency(event.getCurrency())
+                .timestamp(now)
+
+                .build();
 
         enrichedEventPublisher.publish(enriched);
 
