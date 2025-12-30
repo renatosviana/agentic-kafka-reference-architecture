@@ -324,7 +324,7 @@ Agentic audit:
 
 - Docker Desktop (Docker Compose v2)
 - Git
-- An OpenAI API key (stored locally in .env, not committed)
+- An OpenAI API key (stored locally in .env, not committed) -- see [OpenAI / GenAI Setup](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc#openai--genai-setup)
 
 ### 1. Clone the repository
 
@@ -392,8 +392,12 @@ Example (credit):
 ```bash
 curl -X POST "http://localhost:18082/accounts/ACC123/credit?amount=48"
 ```
-- Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc/doc)):
-<img width="1407" height="492" alt="image" src="https://github.com/user-attachments/assets/1d1e5d9b-96c8-41a8-861e-0cffd71844c8" />
+Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/doc)):
+- In Postman Import -> folders -> Upload
+<img width="1196" height="832" alt="image" src="https://github.com/user-attachments/assets/c225d909-4126-4bcd-8848-10f69d898f55" />
+
+<img width="1377" height="811" alt="image" src="https://github.com/user-attachments/assets/9f3649ae-104a-4869-8798-0c863789132d" />
+
 
 (Adjust host/port if your app uses a different server port.)
 
