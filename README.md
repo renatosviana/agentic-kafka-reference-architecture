@@ -85,6 +85,133 @@ flowchart LR
   N4 --> M1 --> M2
 
 ```
+## Quick Start (Local Docker Compose)
+
+**Prerequisites**
+
+- Docker Desktop (Docker Compose v2)
+- Git
+- An OpenAI API key (stored locally in .env, not committed) -- see [OpenAI / GenAI Setup](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc#openai--genai-setup)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/renatosviana/agentic-kafka-reference-architecture.git
+cd agentic-kafka-reference-architecture
+```
+### 2. Create local environment file
+
+```bash
+OPENAI_API_KEY=sk-xxxx
+```
+
+⚠️ .env is gitignored and must never be committed.
+
+### 3. Start the full stack
+
+```bash
+docker compose up -d
+```
+This starts:
+- Zookeeper
+- Kafka (dual listeners)
+- Schema Registry
+- Control Center
+- PostgreSQL
+- GenAI service
+- Agentic Notifier service
+- MailHog
+
+### 4. Verify running containers
+
+```bash
+docker compose ps
+```
+All services should be Up.
+
+### 5. Service Endpoints & Ports
+
+### GenAI API
+- **URL:** ``` http://localhost:18082 ```
+- **Purpose:** Produces account events and enriched messages
+
+Example:
+```bash
+POST http://localhost:18082/accounts/ACC123/debit?amount=45
+```
+### 6. Agentic Notifier Service
+
+- **URL:** ``` http://localhost:18082 ```
+- **Purpose:** Consumes enriched events, makes decisions, triggers actions
+
+| Kafka                        | Boostrap Server  |
+|------------------------------|------------------|
+| Containers                   | Kafka:9092       | 
+| Host (local tools)           | localhost:2902   |
+
+### 7. Confluent Control Center
+
+- **URL:** [Confluent Control Center](http://localhost:59021)
+- **Purpose:** View topics, messages, consumer groups
+
+#### Trigger events (Postman / curl)
+Example (credit):
+```bash
+curl -X POST "http://localhost:18082/accounts/ACC123/credit?amount=48"
+```
+Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/doc)):
+- In Postman Import -> folders -> Upload
+<img width="1196" height="832" alt="image" src="https://github.com/user-attachments/assets/c225d909-4126-4bcd-8848-10f69d898f55" />
+
+<img width="1377" height="811" alt="image" src="https://github.com/user-attachments/assets/9f3649ae-104a-4869-8798-0c863789132d" />
+
+
+(Adjust host/port if your app uses a different server port.)
+
+#### Observe in Confluent Control Center
+Confirm messages appear in:
+
+- account-events
+- account.enriched.v1
+- agent.decision.v1
+- agent.action_result.v1
+
+**Example:**
+- Observe in Control Center:
+<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9a6e7806-6b7e-47ee-818a-6a7032d1abf1">
+<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/65c5e983-ea8e-4b42-84c1-6b9baf1a6211">
+
+### 8. MailHog (Email Sink)
+
+- **Web UI:** [MailHog UI](http://localhost:8025)
+- **SMTP:** mailhog:1025 (inside Docker)
+
+Used for local email notifications from the Agentic service.
+
+### 9. Verify the Full Flow
+
+1. Trigger a debit event via GenAI
+2. Verify message in account.enriched.v1
+3. Agentic service consumes the event
+4. Decision published to agent.decision.v1
+5. Action result published to agent.action_result.v1
+6. Email appears in MailHog UI
+
+### 10. Stop & Clean Up
+```bash
+docker compose down -v
+```
+
+### 11. Run Local CI (MANDATORY before pushing)
+
+From the repo root:
+```bash
+./ci-local.sh
+```
+**Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
+
+
+
 ## GenAI vs Agentic AI (why two stages)
 
 - GenAI (enrichment) turns raw account activity into a structured signal: riskScore, summary, timestamp and publishes to account.enriched.v1.
@@ -317,131 +444,6 @@ GenAI enrichment:
 Agentic audit:
 - `agent.decision.v1` — agent decisions (what/why)
 - `agent.action_result.v1` — action results (success/failure)
-
-## Quick Start (Local Docker Compose)
-
-**Prerequisites**
-
-- Docker Desktop (Docker Compose v2)
-- Git
-- An OpenAI API key (stored locally in .env, not committed) -- see [OpenAI / GenAI Setup](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc#openai--genai-setup)
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/renatosviana/agentic-kafka-reference-architecture.git
-cd agentic-kafka-reference-architecture
-```
-### 2. Create local environment file
-
-```bash
-OPENAI_API_KEY=sk-xxxx
-```
-
-⚠️ .env is gitignored and must never be committed.
-
-### 3. Start the full stack
-
-```bash
-docker compose up -d
-```
-This starts:
-- Zookeeper
-- Kafka (dual listeners)
-- Schema Registry
-- Control Center
-- PostgreSQL
-- GenAI service
-- Agentic Notifier service
-- MailHog
-
-### 4. Verify running containers
-
-```bash
-docker compose ps
-```
-All services should be Up.
-
-### 5. Service Endpoints & Ports
-
-### GenAI API
-- **URL:** ``` http://localhost:18082 ```
-- **Purpose:** Produces account events and enriched messages
-
-Example:
-```bash
-POST http://localhost:18082/accounts/ACC123/debit?amount=45
-```
-### 6. Agentic Notifier Service
-
-- **URL:** ``` http://localhost:18082 ```
-- **Purpose:** Consumes enriched events, makes decisions, triggers actions
-
-| Kafka                        | Boostrap Server  |
-|------------------------------|------------------|
-| Containers                   | Kafka:9092       | 
-| Host (local tools)           | localhost:2902   |
-
-### 7. Confluent Control Center
-
-- **URL:** [Confluent Control Center](http://localhost:59021)
-- **Purpose:** View topics, messages, consumer groups
-
-#### Trigger events (Postman / curl)
-Example (credit):
-```bash
-curl -X POST "http://localhost:18082/accounts/ACC123/credit?amount=48"
-```
-Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/doc)):
-- In Postman Import -> folders -> Upload
-<img width="1196" height="832" alt="image" src="https://github.com/user-attachments/assets/c225d909-4126-4bcd-8848-10f69d898f55" />
-
-<img width="1377" height="811" alt="image" src="https://github.com/user-attachments/assets/9f3649ae-104a-4869-8798-0c863789132d" />
-
-
-(Adjust host/port if your app uses a different server port.)
-
-#### Observe in Confluent Control Center
-Confirm messages appear in:
-
-- account-events
-- account.enriched.v1
-- agent.decision.v1
-- agent.action_result.v1
-
-**Example:**
-- Observe in Control Center:
-<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9a6e7806-6b7e-47ee-818a-6a7032d1abf1">
-<img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/65c5e983-ea8e-4b42-84c1-6b9baf1a6211">
-
-### 8. MailHog (Email Sink)
-
-- **Web UI:** [MailHog UI](http://localhost:8025)
-- **SMTP:** mailhog:1025 (inside Docker)
-
-Used for local email notifications from the Agentic service.
-
-### 9. Verify the Full Flow
-
-1. Trigger a debit event via GenAI
-2. Verify message in account.enriched.v1
-3. Agentic service consumes the event
-4. Decision published to agent.decision.v1
-5. Action result published to agent.action_result.v1
-6. Email appears in MailHog UI
-
-### 10. Stop & Clean Up
-```bash
-docker compose down -v
-```
-
-### 11. Run Local CI (MANDATORY before pushing)
-
-From the repo root:
-```bash
-./ci-local.sh
-```
-**Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
 
 ## Key Concepts
 - Kafka Streams (KTable for state)
