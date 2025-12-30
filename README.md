@@ -390,7 +390,7 @@ POST http://localhost:18082/accounts/ACC123/debit?amount=45
 #### Trigger events (Postman / curl)
 Example (credit):
 ```bash
-curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=48"
+curl -X POST "http://localhost:18088/accounts/ACC123/credit?amount=48"
 ```
 - Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/kafka-avro-genai-streaming-poc/doc)):
 <img width="1407" height="492" alt="image" src="https://github.com/user-attachments/assets/1d1e5d9b-96c8-41a8-861e-0cffd71844c8" />
