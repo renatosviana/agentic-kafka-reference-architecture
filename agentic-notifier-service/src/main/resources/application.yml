@@ -1,12 +1,12 @@
 server:
-  port: 8085
+  port: 8088
 
 spring:
   kafka:
     kafka:
       admin:
         auto-create: true #For dev only
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     consumer:
       group-id: agentic-notifier-service
       auto-offset-reset: earliest
@@ -21,8 +21,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   mail:
-    host: localhost
-    port: 1025
+    host: ${SPRING_MAIL_HOST:mailhog}
+    port: ${SPRING_MAIL_PORT:1025}
     username: ""
     password: ""
     properties:

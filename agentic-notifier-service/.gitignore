@@ -5,7 +5,6 @@ out/
 .idea/
 *.iml
 out/
-AgenticNotifierService/
 
 ### Eclipse ###
 .apt_generated

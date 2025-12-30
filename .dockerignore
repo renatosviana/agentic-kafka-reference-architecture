@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Gradle caches / build outputs
+**/.gradle
+**/build
+**/out
+**/target
+
+# Logs
+**/*.log
+
+# Node (if any)
+**/node_modules
+
+# Local env / secrets
+.env
+.env.*
+!/.env.example
+
+
+# Large docs/assets (optional — only if you don't need them in image builds)
+**/docs
+**/doc
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.mp4
+**/*.mov
