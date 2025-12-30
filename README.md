@@ -318,55 +318,76 @@ Agentic audit:
 - `agent.decision.v1` — agent decisions (what/why)
 - `agent.action_result.v1` — action results (success/failure)
 
-## Quickstart: Verify the full flow
+## Quick Start (Local Docker Compose)
 
-### 1) Start infrastructure (Docker Compose)
+**Prerequisites**
 
-From the GenAI path:
+- Docker Desktop (Docker Compose v2)
+- Git
+- An OpenAI API key (stored locally in .env, not committed)
+
+### 1. Clone the repository
 
 ```bash
-cd kafka-avro-genai-streaming-poc
+git clone https://github.com/renatosviana/agentic-kafka-reference-architecture.git
+cd agentic-kafka-reference-architecture
+```
+### 2. Create local environment file
+
+```bash
+OPENAI_API_KEY=sk-xxxx
+```
+
+⚠️ .env is gitignored and must never be committed.
+
+### 3. Start the full stack
+
+```bash
 docker compose up -d
+```
+This starts:
+- Zookeeper
+- Kafka (dual listeners)
+- Schema Registry
+- Control Center
+- PostgreSQL
+- GenAI service
+- Agentic Notifier service
+- MailHog
+
+### 4. Verify running containers
+
+```bash
 docker compose ps
 ```
-(Optional) follow infrastructure logs:
+All services should be Up.
+
+### 5. Service Endpoints & Ports
+
+### GenAI API
+- **URL:** ``` http://localhost:18082 ```
+- **Purpose:** Produces account events and enriched messages
+
+Example:
 ```bash
-docker compose logs -f
+POST http://localhost:18082/accounts/ACC123/debit?amount=45
 ```
+### 6. Agentic Notifier Service
 
-Useful UIs:
+- **URL:** ``` http://localhost:18088 ```
+- **Purpose:** Consumes enriched events, makes decisions, triggers actions
 
-- [Confluent Control Center](http://localhost:9021)
+| Kafka                        | Boostrap Server  |
+|------------------------------|------------------|
+| Containers                   | Kafka:9092       | 
+| Host (local tools)           | localhost:2902   |
 
-- [MailHog UI](http://localhost:8025)
+### 7. Confluent Control Center
 
-### 2) Run Local CI (MANDATORY before pushing)
+- **URL:** [Confluent Control Center](http://localhost:59021)
+- **Purpose:** View topics, messages, consumer groups
 
-From the repo root:
-```bash
-./ci-local.sh
-```
-**Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
-
-### 3) Start the services (two terminals)
-
-Run all Gradle commands from the repo root using qualified tasks.
-
-Terminal 1 — GenAI + Kafka Streaming app
-```bash
-./gradlew --no-daemon :kafka-avro-genai-streaming-poc:bootRun
-```
-Terminal 2 — Agentic Notifier service
-```bash
-./gradlew --no-daemon :agentic-notifier-service:bootRun
-```
-
-(Optional) Clean + test everything
-```bash
-./gradlew --no-daemon clean test
-```
-
-### 4) Trigger events (Postman / curl)
+#### Trigger events (Postman / curl)
 Example (credit):
 ```bash
 curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=48"
@@ -376,7 +397,7 @@ curl -X POST "http://localhost:8080/accounts/ACC123/credit?amount=48"
 
 (Adjust host/port if your app uses a different server port.)
 
-### 5) Observe in Confluent Control Center
+#### Observe in Confluent Control Center
 Confirm messages appear in:
 
 - account-events
@@ -389,10 +410,34 @@ Confirm messages appear in:
 <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9a6e7806-6b7e-47ee-818a-6a7032d1abf1">
 <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/65c5e983-ea8e-4b42-84c1-6b9baf1a6211">
 
-### 6) Verify email
+### 8. MailHog (Email Sink)
 
-Open MailHog UI:
-- [MailHog UI](http://localhost:8025)
+- **Web UI:** [MailHog UI](http://localhost:8025)
+- **SMTP:** mailhog:1025 (inside Docker)
+
+Used for local email notifications from the Agentic service.
+
+### 9. Verify the Full Flow
+
+1. Trigger a debit event via GenAI
+2. Verify message in account.enriched.v1
+3. Agentic service consumes the event
+4. Decision published to agent.decision.v1
+5. Action result published to agent.action_result.v1
+6. Email appears in MailHog UI
+
+### 10. Stop & Clean Up
+```bash
+docker compose down -v
+```
+
+### 11. Run Local CI (MANDATORY before pushing)
+
+From the repo root:
+```bash
+./ci-local.sh
+```
+**Required:** Run ./ci-local.sh before every push/PR to ensure both Gradle builds pass locally (matches GitHub Actions).
 
 ## Key Concepts
 - Kafka Streams (KTable for state)
