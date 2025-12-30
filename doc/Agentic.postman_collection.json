@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "f65c04cb-5738-4e3b-b60d-c0f72cac2356",
+		"name": "Agentic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50799688",
+		"_collection_link": "https://evolutifyai-8312506.postman.co/workspace/test~5ac6dad3-2828-4c11-9593-25b5694936a1/collection/50799688-f65c04cb-5738-4e3b-b60d-c0f72cac2356?action=share&source=collection_link&creator=50799688"
+	},
+	"item": [
+		{
+			"name": "enriched-event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"eventId\": \"evt-001\",\r\n  \"accountId\": \"ACC123\",\r\n  \"riskScore\": 9,\r\n  \"summary\": \"Credit with negative amount detected\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18088/api/agent/enriched-event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18088",
+					"path": [
+						"api",
+						"agent",
+						"enriched-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:18088/api/agent/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18088",
+					"path": [
+						"api",
+						"agent",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
