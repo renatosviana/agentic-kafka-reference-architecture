@@ -38,6 +38,9 @@ bin/
 build/
 **/build/
 
+# Postgres runtime data (Docker volume)
+postgres-data/
+
 # OS
 .DS_Store
 Thumbs.db
