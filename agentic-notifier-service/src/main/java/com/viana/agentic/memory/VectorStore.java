@@ -32,7 +32,7 @@ public class VectorStore {
                    (embedding <=> ?::vector) AS distance
             FROM account_memory
             WHERE account_id = ?
-              AND (? IS NULL OR event_id IS DISTINCT FROM ?)
+              AND (?::text IS NULL OR event_id IS DISTINCT FROM ?::text)
             ORDER BY embedding <=> ?::vector
             LIMIT ?
         """, (ResultSet rs, int rowNum) -> new MemoryHit(

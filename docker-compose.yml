@@ -23,14 +23,14 @@ services:
     environment:
       MAIL_HOST: mailhog
       MAIL_PORT: 1025
-
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/agentic
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-
       AGENTIC_EMBEDDINGS_BASEURL: http://embeddings:8000
       AGENTIC_MEMORY_ENABLED: "true"
       AGENTIC_MEMORY_TOPK: "5"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_PROPERTIES_SCHEMA_REGISTRY_URL: http://schema-registry:8081
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
