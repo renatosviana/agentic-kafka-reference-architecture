@@ -2,6 +2,12 @@ server:
   port: 8088
 
 spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/agentic}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
   kafka:
     kafka:
       admin:
@@ -34,6 +40,13 @@ agentic:
     enabled: true
     from: "agentic@local.dev"
     to: "ops@local.dev"
+
+  memory:
+    enabled: ${AGENTIC_MEMORY_ENABLED:true}
+    topK: ${AGENTIC_MEMORY_TOPK:5}
+  embeddings:
+    baseUrl: ${AGENTIC_EMBEDDINGS_BASEURL:http://embeddings:8000}
+
 
 logging:
   level:
