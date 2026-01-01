@@ -127,8 +127,8 @@ cd agentic-kafka-reference-architecture
 OPENAI_API_KEY=sk-xxxx
 ```
 
-⚠️ .env is gitignored and must never be committed.
-⚠️ Demo-only security posture: docker-compose and `application.yml` use open, non-production defaults (plain HTTP, dev credentials, single-node Kafka/Postgres); harden these before any real deployment.
+- ⚠️ .env is gitignored and must never be committed.
+- ⚠️ Demo-only security posture: docker-compose and `application.yml` use open, non-production defaults (plain HTTP, dev credentials, single-node Kafka/Postgres); harden these before any real deployment.
 ### 3. Start the full stack
 
 ```bash
