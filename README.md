@@ -104,6 +104,8 @@ flowchart LR
   E1 --> D3
   D3 --> D1
 ```
+**Trade-off**
+- Dedicated vector DB might be needed at large scale, but Postgres+pgvector is “good enough” for a reference architecture
 
 ## Quick Start (Local Docker Compose)
 
