@@ -1,26 +1,42 @@
 [![CI](https://github.com/renatosviana/agentic-kafka-reference-architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/renatosviana/agentic-kafka-reference-architecture/actions/workflows/ci.yml)
 👋 If this architecture helped you, please ⭐ the repo or open a Discussion with questions or feedback.
 
-# Agentic Kafka Reference Architecture
+# Governed, Event-Driven AI for Deterministic Enterprise Systems
 
 ## What this is
-A production-style reference architecture combining:
-- Event-driven microservices (Kafka)
-- GenAI (LLM-based reasoning)
-- Agentic workflows
-- Java + Spring Boot
+A reference architecture that explores **where AI should live inside event-driven enterprise systems**.
+
+Instead of treating GenAI as an autonomous application layer, this project demonstrates how intelligence can operate **within deterministic, replayable, and schema-governed workflows**, using Kafka as the system of record.
+
+A production-style reference architecture that demonstrates how to combine:
+- Event-driven systems as the source of truth (Kafka)
+- GenAI as a constrained reasoning layer
+- Policy-driven agentic workflows with explicit audit trails
+- Java + Spring Boot as a representative enterprise runtime
 
 ## Why this exists
-Most GenAI examples ignore:
-- Throughput
-- Idempotency
-- Schema evolution
-- Streaming consistency
+Most GenAI examples optimize for demos, not operations.
 
-This project shows how to do GenAI *at scale*.
+They ignore:
+- Determinism and replayability
+- Schema evolution and data contracts
+- Throughput and idempotency
+- Auditability and governance boundaries
+- Streaming consistency (ordering, idempotency, and replay-safe processing)
+
+These gaps make many AI systems unusable in regulated or high-scale environments.
 
 ## What problem this solves
-This reference architecture shows how to combine Kafka event streaming with GenAI enrichment and an agentic decision layer, producing auditable decisions and observable actions (email notifications) using Spring Boot, Kafka Streams, and local-first tooling.
+This architecture explores how to **govern AI behavior using event logs, schemas, and explicit decision policies**.
+
+It shows how:
+- Kafka remains the source of truth
+- GenAI enriches events without mutating facts
+- Agentic decision-making is constrained, auditable, and replayable
+- Actions are emitted as events, not side effects
+- Vector memory is a derived index that can be rebuilt from Kafka events.
+
+The result is an AI-enabled system that can be reasoned about, replayed, and evolved safely over time.
 
 ## Architecture
 ### Architecture Diagram
