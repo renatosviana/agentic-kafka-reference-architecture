@@ -196,7 +196,7 @@ Agentic audit:
 - Failure handling & retries
 
 ## Tech Stack
-Java, Spring Boot, Kafka, Avro
+- Java/Spring Boot · Kafka/Kafka Streams · Avro/Schema Registry · PostgreSQL/pgvector · Python embeddings · Docker Compose · MailHog · GitHub Actions
 
 ## Local Development
 
