@@ -139,8 +139,8 @@ Confirm messages appear in:
 
 **Example:**
 - Observe in Control Center:
-  <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/9a6e7806-6b7e-47ee-818a-6a7032d1abf1">
-  <img width="1657" height="771" alt="image" src="https://github.com/user-attachments/assets/65c5e983-ea8e-4b42-84c1-6b9baf1a6211">
+  <img width="1237" height="577" alt="image" src="https://github.com/user-attachments/assets/eb56fc35-ec16-414f-8888-4faa93205d41" />
+  <img width="1181" height="639" alt="image" src="https://github.com/user-attachments/assets/e6a2ab34-6a36-4b82-8473-2ac40ac56149" />
 
 ### 8. MailHog (Email Sink)
 
