@@ -40,6 +40,7 @@ These gaps make many AI systems unusable in regulated or high-scale environments
 - 📦 Schema evolution: [docs/concepts/schema-evolution.md](docs/concepts/schema-evolution.md)
 - ☸️ Production notes: [docs/deployment/production.md](docs/deployment/production.md)
 - 📮 Postman collections: [docs/postman](docs/postman)
+- 🌐 Full local runtime and transport topology: [docs/architecture/runtime-topology.md](docs/architecture/runtime-topology.md).
 
 ## What problem this solves
 This architecture explores how to **govern AI behavior using event logs, schemas, and explicit decision policies**.
