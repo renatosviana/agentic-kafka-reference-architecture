@@ -26,7 +26,7 @@ They ignore:
 
 These gaps make many AI systems unusable in regulated or high-scale environments.
 
-Who this is for
+## Who this is for
 
 - **Platform / Streaming engineers** building Kafka-based pipelines with strong delivery guarantees
 - **Architects** designing AI inside regulated or high-scale systems (auditability, replay, governance)
