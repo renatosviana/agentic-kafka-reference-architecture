@@ -1,5 +1,8 @@
 services:
   genai:
+    depends_on:
+      postgres:
+        condition: service_healthy
     build:
       context: .
       dockerfile: kafka-avro-genai-streaming-poc/Dockerfile
@@ -45,10 +48,11 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - "19092:9092"      # internal listener (for other containers)
-      - "39092:29092"    # host listener (for my Spring Boot app)
+    - "29092:29092"
+
     environment:
       KAFKA_BROKER_ID: 1
+      KAFKA_BROKER_RACK: rack-1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
       # Two listeners: one for containers, one for host
@@ -65,11 +69,13 @@ services:
       - kafka
     entrypoint: ["/bin/bash", "-lc"]
     #DEV only
-    command: >
+    command: >    
       "
+      echo 'Waiting for Kafka...' &&
+      cub kafka-ready -b kafka:9092 1 60 &&
       echo 'Creating topics...' &&
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.decision.v1 --partitions 1 --replication-factor 1 &&
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.action_result.v1 --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.decision.v1 --partitions 6 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic agent.action_result.v1 --partitions 6 --replication-factor 1 &&
       echo 'Done.'
       "
       
@@ -97,6 +103,12 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./infra/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d genai_kafka"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
 
   embeddings:
     build:
