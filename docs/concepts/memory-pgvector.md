@@ -38,7 +38,7 @@ This design intentionally avoids external vector databases to show that:
 
 This mirrors how many teams **incrementally adopt AI** without introducing new infrastructure prematurely.
 
-Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/doc)):
+Run it in Postman (use [Postman collection](https://github.com/renatosviana/agentic-kafka-reference-architecture/tree/main/docs/postman)):
 Store a memory:
 <img width="846" height="522" alt="image" src="https://github.com/user-attachments/assets/c3c594f2-3d0f-42f9-a0de-f2fb9974f13d" />
 
