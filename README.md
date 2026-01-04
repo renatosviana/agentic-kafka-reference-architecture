@@ -33,8 +33,6 @@ These gaps make many AI systems unusable in regulated or high-scale environments
 - **Backend engineers** wanting production patterns (Spring Boot, Kafka Streams, Schema Registry)
 - **Teams exploring semantic memory** (pgvector) without jumping straight to a dedicated vector DB
 
-Optional: what it’s NOT
-
 ## Start here
 - 🧭 Architecture overview: [docs/architecture/overview.md](docs/architecture/overview.md)
 - 🧠 Agentic memory (pgvector): [docs/concepts/memory-pgvector.md](docs/concepts/memory-pgvector.md)
