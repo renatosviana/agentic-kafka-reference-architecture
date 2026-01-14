@@ -1,5 +1,9 @@
-## Architecture
-### Architecture Diagram
+# High-Level Architecture & System Overview
+
+## High-Level Architecture (End-to-End Flow)
+
+
+
 
 ```mermaid
 flowchart LR
@@ -50,20 +54,44 @@ flowchart LR
   A1 --> C1 --> C2 --> K1
   A2 --> C1 --> C2 --> K1
 
-  K1 --> S1 --> K3 --> C3
+  K1 --> AccountEventConsumer --> C3
   C3 --> DB
   C3 --> C5 --> K4
 
-  A3 --> C4 --> DB --> A3
+  A3 --> C4 --> DB 
 
-  K4 --> N1 --> N2 --> K5
-  K5 --> N3 --> K6
-  N4 --> M1 --> M2
+  K4 --> N1 --> N2
+  N2 --> K5
+  N3 --> K6
+  N3 --> N4 --> M1 --> M2
 
 ```
+## How it works (end-to-end flow)
 
+1. **User triggers commands**  
+   `POST /accounts/:id/credit` or `POST /accounts/:id/debit` hits `AccountController`.
 
-### Agentic Memory Flow
+2. **API produces events (write path)**  
+   `AccountEventProducer` publishes account events to Kafka: `account-events`.
+
+3. **Streaming aggregation (state from events)**  
+   Kafka Streams aggregates account events into a `KTable (account-balance-store)`, with all state changes durably persisted to the changelog topic `(account-balance-store-changelog)` to enable fault-tolerant recovery and scaling.
+
+5. **GenAI enrichment + materialized read model**  
+   `AccountProcessingService + GenAIClient` consumes the aggregated balance view, writes summaries to Postgres
+   (`account_summaries`), and publishes enriched events to `account.enriched.v1`.
+
+6. **Fast reads (read path)**  
+   The UI loads summaries via `AccountSummaryController` from Postgres (materialized view pattern).
+
+7. **Agentic decision loop**  
+   `Agentic Notifier Service` consumes `account.enriched.v1`, makes decisions (`agent.decision.v1`), executes actions,
+   and emits results (`agent.action_result.v1`).
+
+8. **Notifications (local dev)**  
+   `EmailNotifier` sends emails to MailHog (SMTP :1025, UI :8025) for verification.
+
+## Agentic Memory Flow
 ```mermaid
 flowchart LR
   subgraph Agentic["Agentic Notifier Service"]
@@ -80,5 +108,21 @@ flowchart LR
   E1 --> D3
   D3 --> D1
 ```
+## Agentic Memory Flow (embedding-based memory loop)
+
+The Decision Engine can store and retrieve “memory” to improve future decisions:
+
+1. Decision Engine → Embedding Client → Embedding Service (Sentence Transformer)
+2. Embeddings stored in Postgres **pgvector**
+3. Memory retrieved back into Decision Engine during decision making
+
+**Trade-off:** Postgres + pgvector is great for a reference architecture; at larger scale you may prefer a dedicated vector DB.
+
+## Key ideas
+- **Event-driven core:** account changes are immutable events; state is derived via stream processing.
+- **CQRS-style split:** writes go to Kafka; reads come from a Postgres materialized view for speed.
+- **Replayability:** Kafka topics + changelogged state enable deterministic reprocessing.
+- **Agentic automation:** enriched events drive autonomous decisions + actions, with auditable topics.
+
 **Trade-off**
 - Dedicated vector DB might be needed at large scale, but Postgres+pgvector is “good enough” for a reference architecture
