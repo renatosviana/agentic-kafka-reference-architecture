@@ -63,7 +63,7 @@ flowchart LR
 ```
 ### Implementation note
 
-I intentionally keep a simple consumer-driven balance calc for clarity in the reference implementation. The Kafka Streams KTable is present to show the scalable pattern, and we will align GenAI enrichment to the KTable/changelog in a future iteration.
+I intentionally keep a simple consumer-driven balance calc for clarity in the reference implementation. The Kafka Streams KTable is present to show the scalable pattern, and I will align GenAI enrichment to the KTable/changelog in a future iteration.
 
 ## How it works (end-to-end flow)
 
