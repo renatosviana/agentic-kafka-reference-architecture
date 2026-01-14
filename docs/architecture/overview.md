@@ -61,6 +61,7 @@ flowchart LR
   N3 --> N4 --> M1 --> M2
 
 ```
+### Implementation note
 
 I intentionally keep a simple consumer-driven balance calc for clarity in the reference implementation. The Kafka Streams KTable is present to show the scalable pattern, and we will align GenAI enrichment to the KTable/changelog in a future iteration.
 
