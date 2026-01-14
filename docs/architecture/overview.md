@@ -115,13 +115,11 @@ The Decision Engine can store and retrieve “memory” to improve future decisi
 2. Embeddings stored in Postgres **pgvector**
 3. Memory retrieved back into Decision Engine during decision making
 
-**Trade-off:** Postgres + pgvector is great for a reference architecture; at larger scale you may prefer a dedicated vector DB.
+**Trade-off**
+- Dedicated vector DB might be needed at large scale, but Postgres+pgvector is “good enough” for a reference architecture
 
 ## Key ideas
 - **Event-driven core:** account changes are immutable events; state is derived via stream processing.
 - **CQRS-style split:** writes go to Kafka; reads come from a Postgres materialized view for speed.
 - **Replayability:** Kafka topics + changelogged state enable deterministic reprocessing.
 - **Agentic automation:** enriched events drive autonomous decisions + actions, with auditable topics.
-
-**Trade-off**
-- Dedicated vector DB might be needed at large scale, but Postgres+pgvector is “good enough” for a reference architecture
