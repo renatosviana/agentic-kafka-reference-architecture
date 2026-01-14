@@ -1,10 +1,5 @@
 # High-Level Architecture & System Overview
 
-## High-Level Architecture (End-to-End Flow)
-
-
-
-
 ```mermaid
 flowchart LR
 
@@ -66,6 +61,9 @@ flowchart LR
   N3 --> N4 --> M1 --> M2
 
 ```
+
+I intentionally keep a simple consumer-driven balance calc for clarity in the reference implementation. The Kafka Streams KTable is present to show the scalable pattern, and we will align GenAI enrichment to the KTable/changelog in a future iteration.
+
 ## How it works (end-to-end flow)
 
 1. **User triggers commands**  
