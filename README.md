@@ -34,7 +34,7 @@ These gaps make many AI systems unusable in regulated or high-scale environments
 - **Teams exploring semantic memory** (pgvector) without jumping straight to a dedicated vector DB
 
 ## Start here
-- 🧭 Architecture overview: [docs/architecture/overview.md](docs/architecture/overview.md)
+- 🧭 High-Level Architecture & System Overview: [docs/architecture/overview.md](docs/architecture/overview.md)
 - 🧠 Agentic memory (pgvector): [docs/concepts/memory-pgvector.md](docs/concepts/memory-pgvector.md)
 - 🔁 Avro vs JSON: [docs/concepts/avro-vs-json.md](docs/concepts/avro-vs-json.md)
 - 📦 Schema evolution: [docs/concepts/schema-evolution.md](docs/concepts/schema-evolution.md)
