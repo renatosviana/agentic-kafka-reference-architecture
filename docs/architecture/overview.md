@@ -116,7 +116,9 @@ The Decision Engine can store and retrieve “memory” to improve future decisi
 3. Memory retrieved back into Decision Engine during decision making
 
 **Trade-off**
-- Dedicated vector DB might be needed at large scale, but Postgres+pgvector is “good enough” for a reference architecture
+- Postgres + pgvector is intentionally used for simplicity in this reference architecture and works well for typical semantic recall.
+- As query complexity grows, more advanced approaches (iterative/agentic retrieval, multi-step retrieval or re-ranking, or a dedicated vector database) may be required.
+
 
 ## Key ideas
 - **Event-driven core:** account changes are immutable events; state is derived via stream processing.
