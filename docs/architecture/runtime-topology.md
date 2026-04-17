@@ -62,4 +62,3 @@ Microservices communicate over long-lived TCP connections. Kafka bridges host an
 Supporting services:
 - PostgreSQL (pgvector) :5432
 - Schema Registry       :8081 (host 18081)
-- Zookeeper             :2181 (host 12181)

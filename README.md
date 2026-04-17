@@ -82,7 +82,6 @@ OPENAI_API_KEY=sk-xxxx
 docker compose up -d
 ```
 This starts:
-- Zookeeper
 - Kafka (dual listeners)
 - Schema Registry
 - Control Center
