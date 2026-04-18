@@ -44,10 +44,6 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-#TO REMOVE
-    #  KAFKA_BROKER_ID: 1
-    #  KAFKA_BROKER_RACK: rack-1
-    #  KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
       # Three listeners: one for containers, one for host, one for controller
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
